@@ -18,7 +18,7 @@ Follow below steps to add DorsaPayment to your app :1. Download below files and 
   3. Add the dependency :
       ```gradle
           dependencies {
-                                implementation 'com.github.DorsaFamily:DorsaPayment:v1.2'
+                                implementation 'com.github.DorsaFamily:DorsaPayment:v2.0'
                             }
       ```
 Now you can use Function to start, check or cancel subscription (Check sample for more details).                     
