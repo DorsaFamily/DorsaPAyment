@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "123";
-    private String productCode = "123";
-    private String irancellSku = "test_dorsa_payment";
+    private String appCode = "130";
+    private String productCode = "130005";
+    private String irancellSku = "bakh960824";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "پرداخت موفق", Toast.LENGTH_SHORT).show();
+                Payment payment=new Payment(this);
             } else {
                 Toast.makeText(this, "اشکال در پرداخت به دلیل " + data.getStringExtra("message"), Toast.LENGTH_SHORT).show();
             }

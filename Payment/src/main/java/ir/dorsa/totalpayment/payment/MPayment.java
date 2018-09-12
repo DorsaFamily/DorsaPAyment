@@ -4,14 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import ir.dorsa.totalpayment.payment.models.ResponseAuthentication;
-import ir.dorsa.totalpayment.payment.models.ResponseAuthenticationRequest;
-import ir.dorsa.totalpayment.payment.models.ResponseSubscribe;
-import ir.dorsa.totalpayment.payment.models.ResponseSubscribeSecend;
-import ir.dorsa.totalpayment.payment.models.ResponseVerifyAuthentication;
-import ir.dorsa.totalpayment.tools.CalTool;
-import ir.dorsa.totalpayment.tools.Utils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import ir.dorsa.totalpayment.payment.models.ResponseAuthentication;
+import ir.dorsa.totalpayment.payment.models.ResponseAuthenticationRequest;
+import ir.dorsa.totalpayment.payment.models.ResponseSubscribe;
+import ir.dorsa.totalpayment.payment.models.ResponseSubscribeSecend;
+import ir.dorsa.totalpayment.payment.models.ResponseVerifyAuthentication;
+import ir.dorsa.totalpayment.tools.CalTool;
+import ir.dorsa.totalpayment.tools.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -84,11 +83,11 @@ public class MPayment implements IMPayment {
     }
 
     public String getPhoneNumber() {
-        SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
+        SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
 
-    public String getLocalPhoneNumber(){
+    public String getLocalPhoneNumber() {
         return phoneNumber;
     }
 
@@ -108,8 +107,8 @@ public class MPayment implements IMPayment {
 
     }
 
-    public void setPhoneNumber(String phoneNumber){
-        this.phoneNumber=phoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void savePhoneNumber(String phoneNumber) {
@@ -138,7 +137,7 @@ public class MPayment implements IMPayment {
         return sharedPrefrece.getBoolean(SH_P_BUY_IN_APP_ENABLE_IRANCELL, true);
     }
 
-    public void clearUserInfo(){
+    public void clearUserInfo() {
         SharedPreferences sharedPrefrece = getContext().getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
         sharedPrefereceEditor.putString(SH_P_BUY_IN_APP_ACCESS_TOKEN, null);
@@ -151,7 +150,7 @@ public class MPayment implements IMPayment {
     }
 
 
-    public void setHasKey(boolean hasKey){
+    public void setHasKey(boolean hasKey) {
 
         SharedPreferences sharedPrefrece = getContext().getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
@@ -160,7 +159,7 @@ public class MPayment implements IMPayment {
         sharedPrefereceEditor.commit();
     }
 
-    public boolean getHasKey(){
+    public boolean getHasKey() {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getBoolean(SH_P_BUY_IN_APP_HAS_KEY, false);
     }
@@ -228,10 +227,10 @@ public class MPayment implements IMPayment {
         });
     }
 
-    public void doSendKey(String key){
-        if(getHasKey()){
+    public void doSendKey(String key) {
+        if (getHasKey()) {
             doSendKey2G(key);
-        }else{
+        } else {
             doSendKeyNormal(key);
         }
     }
@@ -281,7 +280,7 @@ public class MPayment implements IMPayment {
 
     protected void doSendKey2G(String key) {
         iAuthenticationByKey apiService = clientRetrofit.create(iAuthenticationByKey.class);
-        Call<ResponseAuthentication> call = apiService.authentication(phoneNumber, appCode, productCode,key);
+        Call<ResponseAuthentication> call = apiService.authentication(phoneNumber, appCode, productCode, key);
         call.enqueue(new Callback<ResponseAuthentication>() {
             @Override
             public void onResponse(Call<ResponseAuthentication> call, Response<ResponseAuthentication> response) {
@@ -337,7 +336,6 @@ public class MPayment implements IMPayment {
                 if (response.code() == 200) {
                     //Log.d(AppPayment.LOG_TAG,"message is subscribe :"+response.body().getStatus());
                     if ("0".equals(response.body().getStatus()) || "POL0503".equals(response.body().getStatus())) {
-                        Log.d("App.TAG", "onResponse phone number: "+phoneNumber);
                         savePhoneNumber(phoneNumber);
                         saveBuyDetails();
                         ipBuy.onSuccessSubscribe("با تشکر از شما \nسرویس شما در تاریخ " + getPersianDate() + " فعال گردید");
@@ -376,6 +374,7 @@ public class MPayment implements IMPayment {
     }
 
     public void checkStatus() {
+
         interfaceSubscribe apiService = clientRetrofit.create(interfaceSubscribe.class);
         Call<ResponseSubscribeSecend> call = apiService.subscribe_2(
                 getPhoneNumber(), "" + appCode, Utils.getStringPreference(getContext(), "reference_code", "reference_code", ""), productCode
@@ -384,22 +383,33 @@ public class MPayment implements IMPayment {
             @Override
             public void onResponse(Call<ResponseSubscribeSecend> call, Response<ResponseSubscribeSecend> response) {
                 if (response.code() == 200) {
-                    if ("0".equals(response.body().getStatus()) && "active".equals(response.body().getData().get(0).getProductStatus().toLowerCase())) {
-                        ipBuy.onSuccessCheckStatus();
+                    if ("0".equals(response.body().getStatus())) {
+                       /* if("active".equals(response.body().getData().get(0).getProductStatus().toLowerCase()) &&
+                                "active".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){*/
+                        if("active".equals(response.body().getData().get(0).getProductStatus().toLowerCase())){
+                            ipBuy.onSuccessCheckStatus();
+                        }else if("active".equals(response.body().getData().get(0).getProductStatus().toLowerCase()) &&
+                                "inactive".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){
+                            ipBuy.onFailedCheckStatus(STATUS_NO_CHARGE, "شارژ ناکافی");
+                        }else {
+                            clearUserInfo();
+                            ipBuy.onFailedCheckStatus(1, response.body().getMessage());
+                        }
+
                     } else {
                         clearUserInfo();
-                        ipBuy.onFailedCheckStatus(1, response.body().getMessage());
+                        ipBuy.onFailedCheckStatus(2, response.body().getMessage());
                     }
                 } else {
                     try {
                         JSONObject joError = new JSONObject(response.errorBody().string());
                         clearUserInfo();
-                        ipBuy.onFailedCheckStatus(1, joError.getString("message"));
+                        ipBuy.onFailedCheckStatus(3, joError.getString("message"));
                         //Log.d(AppPayment.LOG_TAG, "phone number is :" + joError.getString("message"));
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                         clearUserInfo();
-                        ipBuy.onFailedCheckStatus(1, "خطا در سرور مجددا امتحان نمایید");
+                        ipBuy.onFailedCheckStatus(4, "خطا در سرور مجددا امتحان نمایید");
                     }
 //                    ipBuy.onFailedSubscribe(response.body().getStatus());
                 }

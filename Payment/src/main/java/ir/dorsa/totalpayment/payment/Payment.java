@@ -25,11 +25,14 @@ public class Payment {
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
 
-    private static  Context context;
+    private  Context context;
 
     public Payment(Context context) {
         this.context = context;
-        CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context), R.drawable.dorsa_icon);
+        try {
+            CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context), R.drawable.dorsa_icon);
+        }catch (Exception ex){
+        }
     }
 
     private onCheckFinished onCheckFinished;
@@ -42,7 +45,7 @@ public class Payment {
      * @param irancellSku شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
      * @param splashLayoutResource  آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
-    public static Intent getPaymentIntent(
+    public Intent getPaymentIntent(
             String textSendPhoneNumber,
             String appCode,
             String productCode,
@@ -131,7 +134,13 @@ public class Payment {
         irancellCancel.cancelPurchase(irancellSku);
     }
 
+    @Deprecated
     public String getPhoneNumber(Context context){
+        SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
+        return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
+    }
+
+    public String getPhoneNumber(){
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }

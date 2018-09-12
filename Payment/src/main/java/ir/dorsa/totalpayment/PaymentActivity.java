@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-
-
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.intro.FragmentIntro;
+import ir.dorsa.totalpayment.payment.FragmentCheckStatus;
 import ir.dorsa.totalpayment.payment.FragmentPayment;
+import ir.dorsa.totalpayment.payment.Payment;
 import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
@@ -23,10 +23,12 @@ import static ir.dorsa.totalpayment.payment.Payment.KEY_SPLASH;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_TEXT_SEND_PHONE_NUMBER;
 
 public class PaymentActivity extends AppCompatActivity implements
+        FragmentCheckStatus.OnCheckStatus,
         FragmentIntro.interaction,
         FragmentPayment.interactionPayment {
 
 
+    private static final String KEY_FRG_CHECK_STATUS = "KEY_FRG_CHECK_STATUS";
     private static final String KEY_FRG_INTRO = "KEY_FRG_INTRO";
     private static final String KEY_FRG_PAYMENT = "KEY_FRG_PAYMENT";
 
@@ -43,7 +45,6 @@ public class PaymentActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_payment);
         new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
 
-
         try {
             CharkhoneSdkApp.initSdk(getApplicationContext(), Utils.getSecrets(this), getIntent().getIntExtra("icon", R.drawable.dorsa_icon));
         } catch (Exception ex) {
@@ -51,7 +52,6 @@ public class PaymentActivity extends AppCompatActivity implements
         }
 
         try {
-
 
             textSendPhoneNumber = getIntent().getExtras().getString(KEY_TEXT_SEND_PHONE_NUMBER);
             paymentAppCode = getIntent().getExtras().getString(KEY_APP_CODE);
@@ -61,26 +61,26 @@ public class PaymentActivity extends AppCompatActivity implements
             splashLayoutResource = getIntent().getExtras().getIntArray(KEY_SPLASH);
 
             if (textSendPhoneNumber == null || paymentAppCode == null || paymentProductCode == null) {
-                Intent intent = new Intent();
-                intent.putExtra(KEY_MESSAGE, "مقادر ورودی ناقص می باشد");
-                setResult(Activity.RESULT_CANCELED, intent);
-                finish();
+                onExit();
                 return;
             }
 
+            Payment payment=new Payment(this);
+                if(payment.getPhoneNumber()==null && payment.getPhoneNumber().isEmpty()){
+                    onContinue();
+                }else{
 
-            if (splashLayoutResource != null && splashLayoutResource.length > 0) {
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commit();
-            } else {
-                new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
-                getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.frame_fragment,
-                        new FragmentPayment().newInstance(
-                                textSendPhoneNumber,
-                                paymentProductCode,
-                                paymentAppCode,
-                                paymentIrancellSku
-                        ), KEY_FRG_PAYMENT).commit();
-            }
+                    new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
+                    getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.frame_fragment,
+                            new FragmentCheckStatus().newInstance(
+                                    paymentProductCode,
+                                    paymentAppCode,
+                                    paymentIrancellSku
+                            ), KEY_FRG_CHECK_STATUS).commit();
+                }
+
+
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -124,5 +124,35 @@ public class PaymentActivity extends AppCompatActivity implements
                         paymentAppCode,
                         paymentIrancellSku
                 ), KEY_FRG_PAYMENT).commit();
+    }
+
+
+    @Override
+    public void onChangePhoneNumber() {
+        onEnterSelected();
+    }
+
+    @Override
+    public void onContinue() {
+        if (splashLayoutResource != null && splashLayoutResource.length > 0) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commit();
+        } else {
+            new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
+            getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.frame_fragment,
+                    new FragmentPayment().newInstance(
+                            textSendPhoneNumber,
+                            paymentProductCode,
+                            paymentAppCode,
+                            paymentIrancellSku
+                    ), KEY_FRG_PAYMENT).commit();
+        }
+    }
+
+    @Override
+    public void onExit() {
+        Intent intent = new Intent();
+        intent.putExtra(KEY_MESSAGE, "مقادر ورودی ناقص می باشد");
+        setResult(Activity.RESULT_CANCELED, intent);
+        finish();
     }
 }

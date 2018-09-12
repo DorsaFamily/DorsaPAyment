@@ -221,9 +221,9 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
         DialogMessage dialogMessage=new DialogMessage(getContext());
         dialogMessage.setMessage(expiredDate);
-        dialogMessage.setTextButton("تائید");
+        dialogMessage.setTextButtonOk("تائید");
         dialogMessage.setCancelable(false);
-        dialogMessage.setClickListner(new DialogMessage.ClickListner() {
+        dialogMessage.setClickListnerPosetive(new DialogMessage.ClickListnerPosetive() {
             @Override
             public void onClick() {
                 if (mListener != null) {
@@ -269,9 +269,9 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
         DialogMessage dialogMessage=new DialogMessage(getContext());
         dialogMessage.setMessage(message);
-        dialogMessage.setTextButton("تائید");
+        dialogMessage.setTextButtonOk("تائید");
         dialogMessage.setCancelable(false);
-        dialogMessage.setClickListner(new DialogMessage.ClickListner() {
+        dialogMessage.setClickListnerPosetive(new DialogMessage.ClickListnerPosetive() {
             @Override
             public void onClick() {
                 if (mListener != null) {

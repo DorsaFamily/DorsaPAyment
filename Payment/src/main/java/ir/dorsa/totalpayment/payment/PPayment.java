@@ -9,12 +9,13 @@ import com.android.billingclient.util.IabResult;
 import com.android.billingclient.util.Inventory;
 import com.android.billingclient.util.MarketIntentFactorySDK;
 import com.android.billingclient.util.Purchase;
-import ir.dorsa.totalpayment.tools.Func;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import ir.dorsa.totalpayment.tools.Func;
 
 /**
  * Created by mehdi on 12/28/16.
@@ -332,6 +333,9 @@ public class PPayment implements IPPayment {
 
     }
 
+    public void clearUserInfo(){
+        mBuy.clearUserInfo();
+    }
 
     public void setHasKey(boolean hasKey) {
         mBuy.setHasKey(hasKey);
