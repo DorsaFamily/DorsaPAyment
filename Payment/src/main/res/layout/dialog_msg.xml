@@ -8,7 +8,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bgr_round_ff">
+        android:background="@drawable/bgr_round_ff"
+        android:paddingBottom="15dp"
+        >
 
         <ir.dorsa.totalpayment.customView.CTextView
             android:id="@+id/textView24"
@@ -25,11 +27,11 @@
             android:textSize="14sp" />
 
         <RelativeLayout
+            android:id="@+id/rel_btns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/textView24"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
             >
             <ir.dorsa.totalpayment.customView.cButton
@@ -40,7 +42,7 @@
                 android:stateListAnimator="@null"
                 android:text="تایید"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <ir.dorsa.totalpayment.customView.cButton
                 android:id="@+id/button4"
@@ -52,11 +54,26 @@
                 android:stateListAnimator="@null"
                 android:text="انصراف"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:visibility="gone"
                 />
         </RelativeLayout>
 
+        <ir.dorsa.totalpayment.customView.cButton
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/rel_btns"
+            android:background="@drawable/button_ok_dialog_register"
+            android:stateListAnimator="@null"
+            android:text="سایر"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 
 

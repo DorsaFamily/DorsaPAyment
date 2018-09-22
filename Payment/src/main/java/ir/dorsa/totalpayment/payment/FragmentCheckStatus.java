@@ -1,11 +1,16 @@
 package ir.dorsa.totalpayment.payment;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +23,11 @@ import static ir.dorsa.totalpayment.payment.IMPayment.STATUS_NO_CHARGE;
 
 public class FragmentCheckStatus extends Fragment implements IVPayment {
 
+    private static final int REQUEST_PHONE_CALL = 12;
     private View pView;
     private ProgressDialog pDialog;
+
+    private String chargeNumber="tel:"+Uri.encode("*3003*2*2#");
 
     private static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
     private static final String KEY_APP_CODE = "KEY_APP_CODE";
@@ -93,11 +101,12 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
         if(errorCode==STATUS_NO_CHARGE){
             final DialogMessage dialog=new DialogMessage(getContext());
             dialog.setCancelable(false);
-            dialog.setMessage("شارژ شما برای ادامه کم می باشد\nاعتبار خود را افزایش دهید و یا از شماره دیگری استفاده نمایید");
-            dialog.setTextButtonOk("افزایش اعتبار");
+            dialog.setMessage("دوست عزیز اعتبار خط شما به پایان رسیده است. \nبرای استفاده از این برنامک اعتبار خود را افزایش دهید یا از شماره دیگری استفاده کنید");
+            dialog.setTextButtonOk("خروج");
             dialog.setTextButtonCancel("تغییر شماره");
+            dialog.setTextButtonOthers("شارژ بخر فندق بگیر");
 
-            dialog.setClickListnerPosetive(new DialogMessage.ClickListnerPosetive() {
+            dialog.setClickListenerPositive(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
                     if (onCheckStatus != null) {
@@ -106,7 +115,7 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
                 }
             });
 
-            dialog.setClickListenerNegative(new DialogMessage.ClickListenerNegative() {
+            dialog.setClickListenerNegative(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
                     pPayment.clearUserInfo();
@@ -116,6 +125,31 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
                 }
             });
 
+            dialog.setClickListenerOthers(new DialogMessage.ClickListener() {
+                @Override
+                public void onClick() {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+
+                        intent.setData(Uri.parse(chargeNumber));
+                        startActivity(intent);
+
+                        if (onCheckStatus != null) {
+                            onCheckStatus.onExit("کمبود اعتبار");
+                        }
+                    }
+
+
+
+
+
+
+                }
+            });
+
+
             dialog.show();
         }else if(errorCode==STATUS_INTERNRT_CONNECTION){
             final DialogMessage dialog=new DialogMessage(getContext());
@@ -124,14 +158,14 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
             dialog.setTextButtonOk("تلاش مجدد");
             dialog.setTextButtonCancel("خروج");
 
-            dialog.setClickListnerPosetive(new DialogMessage.ClickListnerPosetive() {
+            dialog.setClickListenerPositive(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
                     pPayment.checkStatus();
                 }
             });
 
-            dialog.setClickListenerNegative(new DialogMessage.ClickListenerNegative() {
+            dialog.setClickListenerNegative(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
                     if (onCheckStatus != null) {
@@ -223,6 +257,27 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            //permission granted
+            Intent intent = new Intent(Intent.ACTION_CALL);
+
+            intent.setData(Uri.parse(chargeNumber));
+            startActivity(intent);
+
+        }else{
+            //permission not granted
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(chargeNumber));
+            startActivity(intent);
+        }
+
+        if (onCheckStatus != null) {
+            onCheckStatus.onExit("کمبود اعتبار");
+        }
+    }
 
     public interface OnCheckStatus{
         void startPaymentFlow(boolean showIntro);

@@ -14,11 +14,13 @@ import ir.dorsa.totalpayment.R;
 
 public class DialogMessage extends Dialog {
 
-    private ClickListnerPosetive clickListnerPosetive;
-    private ClickListenerNegative clickListenerNegative;
+    private ClickListener clickListenerPositive;
+    private ClickListener clickListenerNegative;
+    private ClickListener clickListenerOthers;
     private TextView textMessage;
     private Button btnOk;
     private Button btnCancel;
+    private Button btnOthers;
 
     public DialogMessage(@NonNull Context context) {
         super(context, android.R.style.Theme_Holo_Dialog_NoActionBar);
@@ -36,14 +38,21 @@ public class DialogMessage extends Dialog {
     }
 
 
-    public void setClickListnerPosetive(ClickListnerPosetive clickListnerPosetive) {
-        this.clickListnerPosetive = clickListnerPosetive;
+    public void setClickListenerPositive(ClickListener clickListenerPositive) {
+        this.clickListenerPositive = clickListenerPositive;
     }
 
-    public void setClickListenerNegative(ClickListenerNegative clickListenerNegative) {
+    public void setClickListenerNegative(ClickListener clickListenerNegative) {
         this.clickListenerNegative = clickListenerNegative;
         if (clickListenerNegative != null) {
             btnCancel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setClickListenerOthers(ClickListener clickListenerOthers) {
+        this.clickListenerOthers = clickListenerOthers;
+        if (clickListenerOthers != null) {
+            btnOthers.setVisibility(View.VISIBLE);
         }
     }
 
@@ -56,12 +65,13 @@ public class DialogMessage extends Dialog {
         textMessage=findViewById(R.id.textView24);
         btnOk=findViewById(R.id.button3);
         btnCancel=findViewById(R.id.button4);
+        btnOthers=findViewById(R.id.button5);
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (clickListnerPosetive != null) {
-                    clickListnerPosetive.onClick();
+                if (clickListenerPositive != null) {
+                    clickListenerPositive.onClick();
                 }
                 cancel();
             }
@@ -77,6 +87,16 @@ public class DialogMessage extends Dialog {
                 cancel();
             }
         });
+
+        btnOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clickListenerOthers != null) {
+                    clickListenerOthers.onClick();
+                }
+                cancel();
+            }
+        });
     }
 
     public void setTextButtonOk(String text){
@@ -87,17 +107,19 @@ public class DialogMessage extends Dialog {
         btnCancel.setText(msg);
     }
 
+    public void setTextButtonOthers(String msg){
+        btnOthers.setText(msg);
+    }
+
+
     public void setMessage(String message){
         textMessage.setText(message);
     }
 
 
-    public interface ClickListnerPosetive {
+    public interface ClickListener {
         void onClick();
     }
 
-    public interface ClickListenerNegative{
-        void onClick();
-    }
 
 }
