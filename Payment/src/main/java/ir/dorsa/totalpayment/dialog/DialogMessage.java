@@ -63,6 +63,7 @@ public class DialogMessage extends Dialog {
                 if (clickListnerPosetive != null) {
                     clickListnerPosetive.onClick();
                 }
+                cancel();
             }
         });
 
@@ -73,6 +74,7 @@ public class DialogMessage extends Dialog {
                 if (clickListenerNegative != null) {
                     clickListenerNegative.onClick();
                 }
+                cancel();
             }
         });
     }

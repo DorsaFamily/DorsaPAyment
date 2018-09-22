@@ -25,6 +25,10 @@ import ir.dorsa.totalpayment.dialog.DialogSendPhoneNumber;
 import ir.dorsa.totalpayment.tools.Utils;
 
 import static android.app.Activity.RESULT_OK;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_SKU;
 import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
 public class FragmentPayment extends Fragment implements IVPayment {
@@ -35,10 +39,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
     private String productCode;
     private String sku;
     private String appCode;
-
-    private static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
-    private static final String KEY_APP_CODE = "KEY_APP_CODE";
-    private static final String KEY_SKU = "KEY_SKU";
+    private String marketId;
 
     private static final String KEY_MESSAGE_SEND_PHONE_NUMBER = "KEY_MESSAGE_SEND_PHONE_NUMBER";
 
@@ -74,6 +75,26 @@ public class FragmentPayment extends Fragment implements IVPayment {
         return fragment;
     }
 
+    public static FragmentPayment newInstance(
+            String textSendPhoneNumber,
+            String productCode,
+            String appCode,
+            String sku,
+            String marketId
+    ) {
+        FragmentPayment fragment = new FragmentPayment();
+        Bundle args = new Bundle();
+
+        args.putString(KEY_MESSAGE_SEND_PHONE_NUMBER, textSendPhoneNumber);
+
+        args.putString(KEY_PRODUCT_CODE, productCode);
+        args.putString(KEY_SKU, sku);
+        args.putString(KEY_APP_CODE, appCode);
+        args.putString(KEY_MARKET_ID, marketId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,11 +103,15 @@ public class FragmentPayment extends Fragment implements IVPayment {
             productCode = getArguments().getString(KEY_PRODUCT_CODE);
             sku = getArguments().getString(KEY_SKU);
             appCode = getArguments().getString(KEY_APP_CODE);
+            marketId = getArguments().getString(KEY_MARKET_ID);
 
             textSendPhonenumber=getArguments().getString(KEY_MESSAGE_SEND_PHONE_NUMBER);
 
         }
         pPayment = new PPayment(this, appCode, productCode,sku);
+        if(marketId!=null){
+            pPayment.setMarketingId(marketId);
+        }
 
     }
 

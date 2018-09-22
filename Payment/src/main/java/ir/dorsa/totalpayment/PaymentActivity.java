@@ -16,6 +16,7 @@ import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MESSAGE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_SKU;
@@ -37,6 +38,7 @@ public class PaymentActivity extends AppCompatActivity implements
     private String paymentProductCode;
     private String paymentIrancellSku;
     private int[] splashLayoutResource;
+    private String marketId;
 
 
     @Override
@@ -60,14 +62,16 @@ public class PaymentActivity extends AppCompatActivity implements
 
             splashLayoutResource = getIntent().getExtras().getIntArray(KEY_SPLASH);
 
+            marketId=getIntent().getExtras().getString(KEY_MARKET_ID);
+
             if (textSendPhoneNumber == null || paymentAppCode == null || paymentProductCode == null) {
-                onExit();
+                onExit("مقادیر ناقص می باشد");
                 return;
             }
 
             Payment payment=new Payment(this);
                 if(payment.getPhoneNumber()==null && payment.getPhoneNumber().isEmpty()){
-                    onContinue();
+                    startPaymentFlow(true);
                 }else{
 
                     new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
@@ -90,7 +94,6 @@ public class PaymentActivity extends AppCompatActivity implements
             finish();
         }
     }
-
 
     @Override
     public void onSuccessSubscribe() {
@@ -116,25 +119,13 @@ public class PaymentActivity extends AppCompatActivity implements
 
     @Override
     public void onEnterSelected() {
-        new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
-        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.frame_fragment,
-                new FragmentPayment().newInstance(
-                        textSendPhoneNumber,
-                        paymentProductCode,
-                        paymentAppCode,
-                        paymentIrancellSku
-                ), KEY_FRG_PAYMENT).commit();
+       startPaymentFlow(false);
     }
 
 
     @Override
-    public void onChangePhoneNumber() {
-        onEnterSelected();
-    }
-
-    @Override
-    public void onContinue() {
-        if (splashLayoutResource != null && splashLayoutResource.length > 0) {
+    public void startPaymentFlow(boolean showIntro) {
+        if (showIntro && splashLayoutResource != null && splashLayoutResource.length > 0) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commit();
         } else {
             new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
@@ -143,16 +134,24 @@ public class PaymentActivity extends AppCompatActivity implements
                             textSendPhoneNumber,
                             paymentProductCode,
                             paymentAppCode,
-                            paymentIrancellSku
+                            paymentIrancellSku,
+                            marketId
                     ), KEY_FRG_PAYMENT).commit();
         }
     }
 
+
     @Override
-    public void onExit() {
+    public void onExit(String message) {
         Intent intent = new Intent();
-        intent.putExtra(KEY_MESSAGE, "مقادر ورودی ناقص می باشد");
+        intent.putExtra(KEY_MESSAGE, message);
         setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
+
+    @Override
+    public void alreadySubscribed() {
+        onSuccessSubscribe();
+    }
+
 }

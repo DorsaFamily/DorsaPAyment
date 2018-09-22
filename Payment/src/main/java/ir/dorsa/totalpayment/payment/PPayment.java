@@ -261,6 +261,14 @@ public class PPayment implements IPPayment {
         }
     }
 
+    public String getMarketingId() {
+        return mBuy.getMarketingId();
+    }
+
+    public void setMarketingId(String marketingId) {
+        mBuy.setMarketingId(marketingId);
+    }
+
     protected boolean savePhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber
                 .replace("۰", "0")

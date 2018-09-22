@@ -44,6 +44,12 @@ public class DialogSendPhoneNumber extends Dialog {
         init();
     }
 
+    @Override
+    public void show() {
+        hideError();
+        super.show();
+    }
+
     public void setListener(interactionPhoneNumber mListener) {
         this.mListener = mListener;
     }

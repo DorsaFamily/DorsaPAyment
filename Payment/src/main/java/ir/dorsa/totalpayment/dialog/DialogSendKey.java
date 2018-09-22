@@ -48,8 +48,8 @@ public class DialogSendKey extends Dialog {
 
     @Override
     public void show() {
+        hideError();
         super.show();
-
     }
 
     private void init(){

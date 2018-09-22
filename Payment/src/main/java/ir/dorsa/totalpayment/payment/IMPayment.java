@@ -18,7 +18,8 @@ public interface IMPayment {
     String BR_CAST_GOT_NUMBER="broadcast_get_key";
 
     int STATUS_NO_CHARGE=10;
-    
+    int STATUS_INTERNRT_CONNECTION=11;
+
     void setContext(Context context);
     Context getContext();
 }

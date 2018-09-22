@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import ir.dorsa.totalpayment.payment.models.ResponseAuthentication;
 import ir.dorsa.totalpayment.payment.models.ResponseAuthenticationRequest;
-import ir.dorsa.totalpayment.payment.models.ResponseSubscribe;
 import ir.dorsa.totalpayment.payment.models.ResponseSubscribeSecend;
 import ir.dorsa.totalpayment.payment.models.ResponseVerifyAuthentication;
 import ir.dorsa.totalpayment.tools.CalTool;
@@ -46,6 +45,7 @@ public class MPayment implements IMPayment {
     private String appCode;
     private static final int expiredDays = 7;
     private String phoneNumber;
+    private String marketingId;
 
     public MPayment(IPPayment ipBuy, String appCode, String productCode) {
         this.ipBuy = ipBuy;
@@ -94,6 +94,14 @@ public class MPayment implements IMPayment {
     public String getExpiredDate() {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_DATE, "0000-00-00 00:00:00");
+    }
+
+    public String getMarketingId() {
+        return marketingId;
+    }
+
+    public void setMarketingId(String marketingId) {
+        this.marketingId = marketingId;
     }
 
     private String getAccessToken() {
@@ -237,7 +245,7 @@ public class MPayment implements IMPayment {
 
     protected void doSendKeyNormal(String key) {
         interfaceSendKey apiService = clientRetrofit.create(interfaceSendKey.class);
-        Call<ResponseVerifyAuthentication> call = apiService.app_info(phoneNumber, appCode, key, productCode);
+        Call<ResponseVerifyAuthentication> call = apiService.app_info(phoneNumber, appCode, key, productCode,getMarketingId());
         call.enqueue(new Callback<ResponseVerifyAuthentication>() {
             @Override
             public void onResponse(Call<ResponseVerifyAuthentication> call, Response<ResponseVerifyAuthentication> response) {
@@ -388,8 +396,8 @@ public class MPayment implements IMPayment {
                                 "active".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){*/
                         if("active".equals(response.body().getData().get(0).getProductStatus().toLowerCase())){
                             ipBuy.onSuccessCheckStatus();
-                        }else if("active".equals(response.body().getData().get(0).getProductStatus().toLowerCase()) &&
-                                "inactive".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){
+                        }else if("inactive".equals(response.body().getData().get(0).getProductStatus().toLowerCase()) &&
+                                "active".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){
                             ipBuy.onFailedCheckStatus(STATUS_NO_CHARGE, "شارژ ناکافی");
                         }else {
                             clearUserInfo();
@@ -418,7 +426,7 @@ public class MPayment implements IMPayment {
             @Override
             public void onFailure(Call<ResponseSubscribeSecend> call, Throwable t) {
                 Log.e(TAG, t.toString());
-                ipBuy.onFailedCheckStatus(0, "اشکال در برقراری اینترنت");
+                ipBuy.onFailedCheckStatus(STATUS_INTERNRT_CONNECTION, "اشکال در اتصال به اینترنت");
             }
         });
     }
@@ -437,7 +445,7 @@ public class MPayment implements IMPayment {
         @Headers("Content-Type: application/json")
         @POST("subscription/subscribe/confirm")
         Call<ResponseVerifyAuthentication> app_info(@Query("user_number") String user_number, @Query("service_code") String app_code,
-                                                    @Query("pin") String pin, @Query("product_code") String product_code);
+                                                    @Query("pin") String pin, @Query("product_code") String product_code, @Query("entrance_path") String entrancePath);
     }
 
     //------- end interFace retrofit ----------------------------------
@@ -462,16 +470,4 @@ public class MPayment implements IMPayment {
                                                     @Query("pin") String pin);
     }
 
-    //------- end interFace retrofit ----------------------------------
-    private interface interfaceCheckStatus {
-        @POST("subscription/status")
-        Call<ResponseSubscribe> scheckStatus(@Query("user_number") String user_number, @Query("app_code") String app_code, @Query("reference_code") String reference_code, @Query("product_code") String product_code);
-    }
-
-    //------- end interFace retrofit ----------------------------------
-    private interface interfaceNumber {
-        @GET("get_number.php")
-        Call<ResponseSubscribe> send_number(@Query("phone_number") String mobile_number, @Query("security_code") String security_code);
-    }
-    //------- end interFace retrofit ----------------------------------
 }

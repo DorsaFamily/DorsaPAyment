@@ -21,11 +21,14 @@ public class Payment {
     public static final String KEY_TEXT_SEND_PHONE_NUMBER = "KEY_TEXT_SEND_PHONE_NUMBER";
     public static final String KEY_APP_CODE = "KEY_APP_CODE";
     public static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
+    public static final String KEY_MARKET_ID = "KEY_MARKET_ID";
     public static final String KEY_SKU = "KEY_SKU";
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
 
     private  Context context;
+
+    private String marketId;
 
     public Payment(Context context) {
         this.context = context;
@@ -59,8 +62,14 @@ public class Payment {
         intent.putExtra(KEY_PRODUCT_CODE, productCode);
         intent.putExtra(KEY_SKU, irancellSku);
         intent.putExtra(KEY_SPLASH, splashLayoutResource);
+
+        if(getMarketId()!=null){
+            intent.putExtra(KEY_MARKET_ID, getMarketId());
+        }
+
         return intent;
     }
+
 
 
     /**
@@ -132,6 +141,15 @@ public class Payment {
     public void cancelIrancell(String irancellSku,IrancellCancel.onIrancellCanceled getResult){
         IrancellCancel irancellCancel = new IrancellCancel(context, getResult);
         irancellCancel.cancelPurchase(irancellSku);
+    }
+
+
+    public String getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(String marketId) {
+        this.marketId = marketId;
     }
 
     @Deprecated

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import ir.dorsa.totalpayment.R;
 import ir.dorsa.totalpayment.dialog.DialogMessage;
 
+import static ir.dorsa.totalpayment.payment.IMPayment.STATUS_INTERNRT_CONNECTION;
 import static ir.dorsa.totalpayment.payment.IMPayment.STATUS_NO_CHARGE;
 
 public class FragmentCheckStatus extends Fragment implements IVPayment {
@@ -81,13 +82,13 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
     public void onSuccessCheckStatus() {
         pDialog.cancel();
         if (onCheckStatus != null) {
-            onCheckStatus.onContinue();
+            onCheckStatus.alreadySubscribed();
         }
 
     }
 
     @Override
-    public void onFailedCheckStatus(int errorCode, String errorMessage) {
+    public void onFailedCheckStatus(int errorCode, final String errorMessage) {
         pDialog.cancel();
         if(errorCode==STATUS_NO_CHARGE){
             final DialogMessage dialog=new DialogMessage(getContext());
@@ -100,7 +101,7 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
                 @Override
                 public void onClick() {
                     if (onCheckStatus != null) {
-                        onCheckStatus.onExit();
+                        onCheckStatus.onExit("کمبود اعتبار");
                     }
                 }
             });
@@ -110,16 +111,39 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
                 public void onClick() {
                     pPayment.clearUserInfo();
                     if (onCheckStatus != null) {
-                        onCheckStatus.onChangePhoneNumber();
+                        onCheckStatus.startPaymentFlow(false);
+                    }
+                }
+            });
+
+            dialog.show();
+        }else if(errorCode==STATUS_INTERNRT_CONNECTION){
+            final DialogMessage dialog=new DialogMessage(getContext());
+            dialog.setCancelable(false);
+            dialog.setMessage(errorMessage);
+            dialog.setTextButtonOk("تلاش مجدد");
+            dialog.setTextButtonCancel("خروج");
+
+            dialog.setClickListnerPosetive(new DialogMessage.ClickListnerPosetive() {
+                @Override
+                public void onClick() {
+                    pPayment.checkStatus();
+                }
+            });
+
+            dialog.setClickListenerNegative(new DialogMessage.ClickListenerNegative() {
+                @Override
+                public void onClick() {
+                    if (onCheckStatus != null) {
+                        onCheckStatus.onExit(errorMessage);
                     }
                 }
             });
 
             dialog.show();
         }else{
-
             if (onCheckStatus != null) {
-                onCheckStatus.onContinue();
+                onCheckStatus.startPaymentFlow(true);
             }
         }
 
@@ -201,9 +225,11 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
 
 
     public interface OnCheckStatus{
-        void onChangePhoneNumber();
-        void onContinue();
-        void onExit();
+        void startPaymentFlow(boolean showIntro);
+        void alreadySubscribed();
+        void onExit(String message);
+
+
     }
 
 }

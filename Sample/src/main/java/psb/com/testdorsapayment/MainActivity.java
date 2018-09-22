@@ -17,9 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "130";
-    private String productCode = "130005";
-    private String irancellSku = "bakh960824";
+    private String appCode = "123";
+    private String productCode = "1234";
+    private String irancellSku = "i2345";
+    private String MarketingId = "1234";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         Button btnCancelIrancel = findViewById(R.id.button2);
 
         final Payment payment = new Payment(this);
+
+
+
+//        payment.setMarketId(MarketingId);//در صورتی که خروجی برای مارکتینگ می باشد از این دستور استفاده گردد
 
 //        payment.setEnableIrancell(false);// برای عدم قابلیت اشتراک سیم کارت های همراه اول
 //        payment.isUserPremium();// بررسی اینکه کاربر قبلا ثبت نام نموده است یا نه
