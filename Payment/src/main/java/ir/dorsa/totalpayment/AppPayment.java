@@ -4,9 +4,8 @@ import android.content.Context;
 import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 
-import ir.dorsa.totalpayment.R;
-
 import net.jhoobin.jhub.CharkhoneSdkApp;
+
 
 public class AppPayment extends MultiDexApplication {
 
@@ -24,13 +23,16 @@ public class AppPayment extends MultiDexApplication {
     @Override
     public void onCreate() {
         context = getApplicationContext();
+
+
         CharkhoneSdkApp.initSdk(this, getSecrets(), R.drawable.dorsa_icon);
 
         super.onCreate();
     }
 
     public String[] getSecrets(){
-        return getResources().getStringArray(R.array.secrets);
+        return getResources().getStringArray(
+                R.array.secrets);
     }
 
 

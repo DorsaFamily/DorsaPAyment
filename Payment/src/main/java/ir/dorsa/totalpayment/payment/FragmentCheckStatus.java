@@ -27,7 +27,7 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
     private View pView;
     private ProgressDialog pDialog;
 
-    private String chargeNumber="tel:"+Uri.encode("*3003*2*2#");
+    private String chargeNumber="tel:"+Uri.encode("*3003*1*2#");
 
     private static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
     private static final String KEY_APP_CODE = "KEY_APP_CODE";

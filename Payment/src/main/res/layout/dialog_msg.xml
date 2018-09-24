@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bgr_round_ff"
-        android:paddingBottom="15dp"
+        android:paddingBottom="10dp"
         >
 
         <ir.dorsa.totalpayment.customView.CTextView
@@ -23,7 +23,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:textColor="@color/purple"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
         <RelativeLayout
@@ -38,10 +38,12 @@
                 android:id="@+id/button3"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
-                android:background="@drawable/button_ok_dialog_register"
-                android:stateListAnimator="@null"
-                android:text="تایید"
+                android:background="@drawable/btn_round_solid"
                 android:textColor="@color/white"
+                android:text="تایید"
+                android:layout_margin="5dp"
+                android:elevation="2dp"
+                android:stateListAnimator="@null"
                 android:textSize="12sp" />
 
             <ir.dorsa.totalpayment.customView.cButton
@@ -50,12 +52,14 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/button3"
-                android:background="@drawable/button_ok_dialog_register"
+                android:background="@drawable/btn_round_solid"
                 android:stateListAnimator="@null"
                 android:text="انصراف"
+                android:layout_margin="5dp"
+                android:elevation="2dp"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 />
         </RelativeLayout>
 
@@ -63,16 +67,17 @@
             android:id="@+id/button5"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:elevation="2dp"
+            android:layout_margin="5dp"
+            android:layout_alignRight="@+id/rel_btns"
+            android:layout_alignLeft="@+id/rel_btns"
             android:layout_below="@+id/rel_btns"
-            android:background="@drawable/button_ok_dialog_register"
+            android:background="@drawable/btn_round_solid"
             android:stateListAnimator="@null"
             android:text="سایر"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:visibility="gone"
+            android:visibility="visible"
             />
     </RelativeLayout>
 

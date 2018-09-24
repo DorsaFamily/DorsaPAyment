@@ -82,7 +82,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:textSize="12sp"
-            android:background="@drawable/button_dialog_register"
+            android:background="@drawable/btn_round_stroke"
             android:stateListAnimator="@null"
             android:text="انصراف"
             android:textColor="#7333a3"/>
@@ -94,7 +94,7 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:textSize="12sp"
-            android:background="@drawable/button_ok_dialog_register"
+            android:background="@drawable/btn_round_solid"
             android:stateListAnimator="@null"
             android:text="تایید"
             android:textColor="@color/white" />
