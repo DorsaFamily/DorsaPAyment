@@ -5,7 +5,7 @@
 
 If used lower version of 2.5, first remove paymentSdk from your project.
 
-[Learn remove paymentSdk from Project](www.google.com)
+[Learn remove paymentSdk from Project(Video)](www.google.com)
 
 **Add library to Project**
 
