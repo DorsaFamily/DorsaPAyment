@@ -28,7 +28,7 @@ Follow below steps to add **DorsaPayment** to your app :
   3. Add the dependency :
       ```gradle
           dependencies {
-			            implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+			       implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
                       implementation 'com.github.DorsaFamily:DorsaPayment:v3.0'
                             }
       ```
