@@ -72,7 +72,7 @@ public class DialogSelectOperator extends Dialog {
 
 
     private void init(){
-        setContentView(R.layout.dialog_select_operator);
+        setContentView(R.layout.payment_dialog_select_operator);
         setCancelable(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         getWindow().setDimAmount(0.0f);

@@ -57,7 +57,7 @@ public class DialogMessage extends Dialog {
     }
 
     private void init(){
-        setContentView(R.layout.dialog_msg);
+        setContentView(R.layout.payment_dialog_msg);
         setCancelable(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         getWindow().setDimAmount(0.0f);

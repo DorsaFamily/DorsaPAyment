@@ -55,7 +55,7 @@ public class DialogSendPhoneNumber extends Dialog {
     }
 
     private void init() {
-        setContentView(R.layout.dialog_register_phone);
+        setContentView(R.layout.payment_dialog_register_phone);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 

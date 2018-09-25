@@ -70,7 +70,7 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        pView = inflater.inflate(R.layout.fragment_check_status, container, false);
+        pView = inflater.inflate(R.layout.payment_fragment_check_status, container, false);
         pDialog = new ProgressDialog(getContext());
         pDialog.setMessage("لطفا صبور باشید...");
 

@@ -48,7 +48,7 @@ public class FragmentIntro extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        pView=inflater.inflate(R.layout.fragment_intro,container,false);
+        pView=inflater.inflate(R.layout.payment_fragment_intro,container,false);
 
         viewPager =pView.findViewById(R.id.view_pager);
         relEnter=pView.findViewById(R.id.enter);

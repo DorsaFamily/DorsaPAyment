@@ -53,7 +53,7 @@ public class DialogSendKey extends Dialog {
     }
 
     private void init(){
-        setContentView(R.layout.dialog_register_aouth_key);
+        setContentView(R.layout.payment_dialog_register_aouth_key);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         textKeyChangeNumber = findViewById(R.id.dialog_register_changeNumber);

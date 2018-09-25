@@ -118,7 +118,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        pView = inflater.inflate(R.layout.fragment_payment, container, false);
+        pView = inflater.inflate(R.layout.payment_fragment_payment, container, false);
         pDialog = new ProgressDialog(getContext());
         pDialog.setMessage("لطفا صبور باشید...");
 

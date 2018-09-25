@@ -44,7 +44,7 @@ public class PaymentActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.payment_activity_payment);
         new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
 
         try {
