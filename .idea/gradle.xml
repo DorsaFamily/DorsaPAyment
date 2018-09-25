@@ -10,8 +10,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Payment" />
             <option value="$PROJECT_DIR$/Sample" />
-            <option value="$PROJECT_DIR$/inAppPurchase" />
-            <option value="$PROJECT_DIR$/inAppSDK" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

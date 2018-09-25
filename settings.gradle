@@ -1,1 +1,1 @@
-include ':Sample', ':Payment', ':inAppSDK', ':inAppPurchase'
+include ':Sample', ':Payment'

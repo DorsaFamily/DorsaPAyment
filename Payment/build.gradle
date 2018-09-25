@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.0.1'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
@@ -28,6 +28,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.android.support:design:27.0.1'
+    implementation(name:'inAppPurchase', ext:'aar')
+    implementation(name:'inAppSDK', ext:'aar')
+
 }
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.DorsaFamily'
