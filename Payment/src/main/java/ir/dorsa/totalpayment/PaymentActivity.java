@@ -48,7 +48,7 @@ public class PaymentActivity extends AppCompatActivity implements
         new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
 
         try {
-            CharkhoneSdkApp.initSdk(getApplicationContext(), Utils.getSecrets(this), getIntent().getIntExtra("icon", R.drawable.dorsa_icon));
+            CharkhoneSdkApp.initSdk(getApplicationContext(), Utils.getSecrets(this));
         } catch (Exception ex) {
 
         }
