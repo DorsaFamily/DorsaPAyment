@@ -28,8 +28,6 @@ public class PPayment implements IPPayment {
     protected MPayment mBuy;
     private IabHelper mHelper;
 
-    private ICheckStatus iCheckStatus;
-
     private static String base64EncodedPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZDqoyQQqRhx6ziHo++fDnCdtHPP3lEC8/QfKrdATOIMvTCqKs3Xsdi/lVpf6RzeKhY+n7M6K8qe6vm8cjWC76iNA5lEQOKkgDYaNr/OMqB7UUC+oOFRLMWTnL5a94nSgMXORDlwCr0Jo7wDj10DyvCtcKW9dR6+JLg7tm6cs0YwIDAQAB";
     public static final String access_token = "83caed2d-7110-31b8-be8c-7683728610b8";
 
@@ -46,7 +44,7 @@ public class PPayment implements IPPayment {
         return mBuy.getPhoneNumber();
     }
 
-    public String getLocalPhoneNumber(){
+    public String getLocalPhoneNumber() {
         return mBuy.getLocalPhoneNumber();
     }
 
@@ -132,7 +130,7 @@ public class PPayment implements IPPayment {
     }
 
     protected void checkStatus() {
-        if (mBuy.getPhoneNumber().isEmpty() ) {
+        if (mBuy.getPhoneNumber().isEmpty()) {
             onFailedCheckStatus(1, "empty phone number");
             return;
         }
@@ -140,7 +138,7 @@ public class PPayment implements IPPayment {
 
         if (Func.isNumberMci(mBuy.getPhoneNumber())) {
             mBuy.checkStatus();
-        }else if (Func.isNumberIrancell(mBuy.getPhoneNumber()) && mBuy.getHasKey()) {
+        } else if (Func.isNumberIrancell(mBuy.getPhoneNumber()) && mBuy.getHasKey()) {
             mBuy.checkStatus();
         } else {
             checkIrancellStatus();
@@ -187,7 +185,7 @@ public class PPayment implements IPPayment {
     @Override
     public void onFailedCheckStatus(int errorCode, String errorMessage) {
         if (ivBuy != null) {
-                ivBuy.onFailedCheckStatus(errorCode, errorMessage);
+            ivBuy.onFailedCheckStatus(errorCode, errorMessage);
         }
     }
 
@@ -200,10 +198,8 @@ public class PPayment implements IPPayment {
 
     private void checkIrancellStatus() {
         if (mHelper == null) {
-            mHelper = new IabHelper(getContext(), base64EncodedPublicKey);
-            Intent fillInIntent = new Intent();
-            fillInIntent.putExtra("msisdn", mBuy.getPhoneNumber());
-            mHelper.setFillInIntent(fillInIntent);
+
+            mHelper = new IabHelper(getContext(), base64EncodedPublicKey, new MarketIntentFactorySDK(true));
 
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                 public void onIabSetupFinished(IabResult result) {
@@ -245,7 +241,6 @@ public class PPayment implements IPPayment {
                     }
 
                     Purchase premiumPurchase = inventory.getPurchase(SKU_PREMIUM);
-
 
                     boolean mIsPremium = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase.getDeveloperPayload()));
                     if (mIsPremium) {
@@ -341,7 +336,7 @@ public class PPayment implements IPPayment {
 
     }
 
-    public void clearUserInfo(){
+    public void clearUserInfo() {
         mBuy.clearUserInfo();
     }
 
@@ -349,21 +344,31 @@ public class PPayment implements IPPayment {
         mBuy.setHasKey(hasKey);
     }
 
-    public void setPhoneNumber(String phoneNumber){
+    public void setPhoneNumber(String phoneNumber) {
         mBuy.setPhoneNumber(phoneNumber);
     }
 
     public boolean getHasKey() {
-       return mBuy.getHasKey();
+        return mBuy.getHasKey();
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Irancell payument
     ///////////////////////////////////////////////////////////////////////////
     private void startIrancellPayment(final String phoneNumber) {
+
         ivBuy.onStartPurchaseIrancell();
+
+        if (mHelper != null) {
+            try {
+                mHelper.dispose();
+                mHelper=null;
+            } catch (IabHelper.IabAsyncInProgressException e) {
+                e.printStackTrace();
+            }
+        }
+
         mHelper = new IabHelper(getContext(), base64EncodedPublicKey, new MarketIntentFactorySDK(true));
-        //mHelper = new IabHelper(getContext(), base64EncodedPublicKey);
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra("msisdn", phoneNumber);

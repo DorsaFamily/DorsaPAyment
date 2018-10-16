@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
-import ir.dorsa.totalpayment.R;
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
 import ir.dorsa.totalpayment.tools.Func;
 import ir.dorsa.totalpayment.tools.Utils;
@@ -33,7 +32,7 @@ public class Payment {
     public Payment(Context context) {
         this.context = context;
         try {
-            CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context), R.drawable.dorsa_icon);
+            CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context));
         }catch (Exception ex){
         }
     }

@@ -17,21 +17,19 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "1468";
-    private String productCode = "1468200";
-    private String irancellSku = "fandoghdorsa";
-    private String MarketingId = "1234";
+    private String appCode = "12345";
+    private String productCode = "12345";
+    private String irancellSku = "12345";
+    private String MarketingId = "12345";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnStartPayment = findViewById(R.id.button);
-        Button btnCancelIrancel = findViewById(R.id.button2);
+        final Button btnCancelIrancel = findViewById(R.id.button2);
 
         final Payment payment = new Payment(this);
-
 
 
 //        payment.setMarketId(MarketingId);//در صورتی که خروجی برای مارکتینگ می باشد از این دستور استفاده گردد
@@ -40,41 +38,33 @@ public class MainActivity extends AppCompatActivity {
 //        payment.isUserPremium();// بررسی اینکه کاربر قبلا ثبت نام نموده است یا نه
 
 
-
-        btnStartPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                payment.checkStatus(
-                        appCode,
-                        productCode,
-                        irancellSku,
-                        new Payment.onCheckFinished() {
-                            @Override
-                            public void result(boolean status, String message) {//true فعال می باشد
-                                if (status) {//فعال می باشد
-
-                                } else {//غیر فعال می باشد
-                                    Intent intentDorsaPayment = payment.getPaymentIntent(
-                                            "متن ارسال شماره موبایل",
-                                            appCode,
-                                            productCode,
-                                            irancellSku,
-                                            new int[]{R.layout.intri_0, R.layout.intri_1, R.layout.intri_2, R.layout.intri_3}
-                                    );
-                                    startActivityForResult(intentDorsaPayment, REQUEST_CODE_REGISTER);
-                                }
+        payment.checkStatus(
+                appCode,
+                productCode,
+                irancellSku,
+                new Payment.onCheckFinished() {
+                    @Override
+                    public void result(boolean status, String message) {//true فعال می باشد
+                        if (status) {//فعال می باشد
+                                //نمایش یا عدم نمایش دکمه لغو ایرانسل
+                            if (payment.showCancelSubscribtion()) {
+                                btnCancelIrancel.setVisibility(View.VISIBLE);
+                            } else {
+                                btnCancelIrancel.setVisibility(View.GONE);
                             }
-                        });
-            }
-        });
 
-
-        //نمایش یا عدم نمایش دکمه لغو ایرانسل
-        if (payment.showCancelSubscribtion()) {
-            btnCancelIrancel.setVisibility(View.VISIBLE);
-        } else {
-            btnCancelIrancel.setVisibility(View.GONE);
-        }
+                        } else {//غیر فعال می باشد
+                            Intent intentDorsaPayment = payment.getPaymentIntent(
+                                    "متن ارسال شماره موبایل",
+                                    appCode,
+                                    productCode,
+                                    irancellSku,
+                                    new int[]{R.layout.intri_0, R.layout.intri_1, R.layout.intri_2, R.layout.intri_3}
+                            );
+                            startActivityForResult(intentDorsaPayment, REQUEST_CODE_REGISTER);
+                        }
+                    }
+                });
 
 
         //لغو اشتراک ایرانسل
@@ -91,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     public void resultSuccess() {
                         pDialog.cancel();
                         Toast.makeText(MainActivity.this, "لغو موفقیت آمیز و خروج", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
                     @Override
@@ -112,9 +103,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "پرداخت موفق", Toast.LENGTH_SHORT).show();
-                Payment payment=new Payment(this);
+                Payment payment = new Payment(this);
             } else {
                 Toast.makeText(this, "اشکال در پرداخت به دلیل " + data.getStringExtra("message"), Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
