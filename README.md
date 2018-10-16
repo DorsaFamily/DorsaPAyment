@@ -1,11 +1,21 @@
+
 # DorsaPayment
 
+**IMPORTANT**
 
-Follow below steps to add DorsaPayment to your app :1. Download below files and add to your project
+If used lower version of 2.5, first remove paymentSdk from your project.
 
-  1. Download below files and add to your project:
-   - [inAppPurchase](https://github.com/DorsaFamily/DorsaPayment/blob/master/inAppPurchase/inAppPurchase.aar)
-   - [inAppSDK](https://github.com/DorsaFamily/DorsaPayment/blob/master/inAppSDK/inAppSDK.aar)
+[Learn remove paymentSdk from Project(Video)](http://2rsa.ir/sdk/Remove-old-library.mp4)
+
+**Add library to Project**
+
+Follow below steps to add **DorsaPayment** to your app :
+
+[Learn add paymentSdk (Video)](http://2rsa.ir/sdk/Add-library.mp4)
+
+  1. Download below files and put them in libs folder (your project/app/libs) if libs folder not exist, make it:
+   - [inAppPurchase](http://2rsa.ir/sdk/inAppPurchase.aar)
+   - [inAppSDK](http://2rsa.ir/sdk/inAppSDK.aar)
 
   2. Add below codes to your root build.gradle at the end of repositories:
      ```gradle
@@ -18,7 +28,9 @@ Follow below steps to add DorsaPayment to your app :1. Download below files and 
   3. Add the dependency :
       ```gradle
           dependencies {
-                                implementation 'com.github.DorsaFamily:DorsaPayment:v2.2'
+			        implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+                      implementation 'com.github.DorsaFamily:DorsaPayment:v3.0'
                             }
       ```
+
 Now you can use Function to start, check or cancel subscription (Check sample for more details).                     
