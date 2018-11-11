@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
         android:text="09123456789"
-        android:textColor="#FF3595CA"
+        android:textColor="@color/payment_color_3"
         android:textSize="16sp"
         />
 
@@ -69,9 +69,12 @@
         android:textSize="16sp"
         android:inputType="number"
         android:maxLength="10"
+
         android:textColor="#FF3595CA"
-        android:textColorHint="#b9e5f1"
-        app:backgroundTint="#b9e5f1" />
+        android:textColorHint="@color/payment_color_0"
+        app:backgroundTint="#b9e5f1"
+
+        />
 
     <ir.dorsa.totalpayment.customView.CTextView
         android:id="@+id/dialog_register_changeNumber"
@@ -81,7 +84,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
         android:text="تغییر شماره موبایل"
-        android:textColor="#9e83fc"
+        android:textColor="@color/payment_color_0"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -102,7 +105,7 @@
             android:background="@drawable/btn_round_stroke"
             android:stateListAnimator="@null"
             android:text="انصراف"
-            android:textColor="#7333a3" />
+            android:textColor="@color/payment_color_1" />
 
         <ir.dorsa.totalpayment.customView.cButton
             android:id="@+id/dialog_register_btn_send"

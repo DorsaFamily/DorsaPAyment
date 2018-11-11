@@ -64,7 +64,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="کد فعالسازی دارم"
-        android:textColor="#9e83fc"
+        android:textColor="@color/payment_color_0"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -85,7 +85,7 @@
             android:background="@drawable/btn_round_stroke"
             android:stateListAnimator="@null"
             android:text="انصراف"
-            android:textColor="#7333a3"/>
+            android:textColor="@color/payment_color_3"/>
 
         <ir.dorsa.totalpayment.customView.cButton
             android:id="@+id/dialog_register_btn_send"
@@ -97,7 +97,7 @@
             android:background="@drawable/btn_round_solid"
             android:stateListAnimator="@null"
             android:text="تایید"
-            android:textColor="@color/white" />
+            android:textColor="@color/payment_color_white" />
     </LinearLayout>
 
 </RelativeLayout>
