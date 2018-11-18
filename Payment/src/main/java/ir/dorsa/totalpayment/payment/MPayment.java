@@ -16,6 +16,7 @@ import ir.dorsa.totalpayment.payment.models.ResponseAuthentication;
 import ir.dorsa.totalpayment.payment.models.ResponseAuthenticationRequest;
 import ir.dorsa.totalpayment.payment.models.ResponseSubscribeSecend;
 import ir.dorsa.totalpayment.payment.models.ResponseVerifyAuthentication;
+import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.CalTool;
 import ir.dorsa.totalpayment.tools.Utils;
 import okhttp3.OkHttpClient;
@@ -146,6 +147,8 @@ public class MPayment implements IMPayment {
     }
 
     public void clearUserInfo() {
+        new RegisterInfo(getContext()).deactive(getPhoneNumber());
+
         SharedPreferences sharedPrefrece = getContext().getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
         sharedPrefereceEditor.putString(SH_P_BUY_IN_APP_ACCESS_TOKEN, null);

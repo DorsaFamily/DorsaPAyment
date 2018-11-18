@@ -18,6 +18,10 @@ public class Utils {
 
     public static final int RECORD_REQUEST_CODE = 101;
     public static String PURCHASETOKEN = "PURCHASETOKEN";
+    public static String REGISTER_INFO = "REGISTER_INFO";
+    public static String REGISTER_INFO_INSTALL_KEY = "REGISTER_INFO_INSTALL_KEY";
+    public static String REGISTER_INFO_ACTIVE_KEY = "REGISTER_INFO_ACTIVE_KEY";
+    public static String REGISTER_INFO_DEACTIVE_KEY = "REGISTER_INFO_DEACTIVE_KEY";
     public static String PURCHASETOKENKEY = "PURCHASETOKENKEY";
 
 

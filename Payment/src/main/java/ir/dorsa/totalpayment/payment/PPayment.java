@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.Func;
 
 /**
@@ -130,7 +131,9 @@ public class PPayment implements IPPayment {
     }
 
     protected void checkStatus() {
+
         if (mBuy.getPhoneNumber().isEmpty()) {
+            new RegisterInfo(getContext()).install();
             onFailedCheckStatus(1, "empty phone number");
             return;
         }

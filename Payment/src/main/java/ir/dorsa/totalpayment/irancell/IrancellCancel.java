@@ -3,12 +3,13 @@ package ir.dorsa.totalpayment.irancell;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import ir.dorsa.totalpayment.tools.Utils;
-
 import java.util.concurrent.TimeUnit;
 
 import ir.dorsa.totalpayment.payment.IMPayment;
 import ir.dorsa.totalpayment.payment.PPayment;
+import ir.dorsa.totalpayment.payment.Payment;
+import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
+import ir.dorsa.totalpayment.tools.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -64,6 +65,7 @@ public class IrancellCancel {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.code() == 200) {
+                    new RegisterInfo(context).deactive(new Payment(context).getPhoneNumber());
                     clearUserInfo();
                     getResult.resultSuccess();
                 } else {
