@@ -12,7 +12,6 @@ import ir.dorsa.totalpayment.intro.FragmentIntro;
 import ir.dorsa.totalpayment.payment.FragmentCheckStatus;
 import ir.dorsa.totalpayment.payment.FragmentPayment;
 import ir.dorsa.totalpayment.payment.Payment;
-import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
@@ -98,9 +97,6 @@ public class PaymentActivity extends AppCompatActivity implements
 
     @Override
     public void onSuccessSubscribe() {
-        Payment payment=new Payment(this);
-        new RegisterInfo(getApplicationContext()).active(payment.getPhoneNumber());
-
         setResult(Activity.RESULT_OK);
         finish();
     }

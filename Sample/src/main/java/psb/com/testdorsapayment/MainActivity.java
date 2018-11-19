@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
 import ir.dorsa.totalpayment.payment.Payment;
+import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 //        payment.setEnableIrancell(false);// برای عدم قابلیت اشتراک سیم کارت های همراه اول
 //        payment.isUserPremium();// بررسی اینکه کاربر قبلا ثبت نام نموده است یا نه
 
+//        String userPhoneNumber=payment.getPhoneNumber(); //دریافت شماره موبایل کاربر
 
         payment.checkStatus(
                 appCode,
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 btnCancelIrancel.setVisibility(View.GONE);
                             }
+
+                            new RegisterInfo(MainActivity.this).active(payment.getPhoneNumber());
 
                         } else {//غیر فعال می باشد
                             Intent intentDorsaPayment = payment.getPaymentIntent(
