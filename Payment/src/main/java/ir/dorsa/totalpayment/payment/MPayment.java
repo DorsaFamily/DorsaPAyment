@@ -347,8 +347,13 @@ public class MPayment implements IMPayment {
                 if (response.code() == 200) {
                     //Log.d(AppPayment.LOG_TAG,"message is subscribe :"+response.body().getStatus());
                     if ("0".equals(response.body().getStatus()) || "POL0503".equals(response.body().getStatus())) {
+
                         savePhoneNumber(phoneNumber);
+
+                        new RegisterInfo(getContext()).active(phoneNumber);
+
                         saveBuyDetails();
+
                         ipBuy.onSuccessSubscribe("با تشکر از شما \nسرویس شما در تاریخ " + getPersianDate() + " فعال گردید");
                     } else {
                         ipBuy.onFailedSubscribe(response.body().getStatus());

@@ -7,8 +7,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +18,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import ir.dorsa.totalpayment.registerInformation.model.ParamsRegisterInformation;
+import ir.dorsa.totalpayment.tools.Func;
 import ir.dorsa.totalpayment.tools.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -151,12 +150,14 @@ public class RegisterInfo {
         params.setPkgName(pkgName);
         params.setVarsion(versionName);
 
-        params.setDeviceModel(Build.MANUFACTURER);
-        params.setDeviceName(Build.MODEL);
+        params.setDeviceName(Build.MANUFACTURER);
+        params.setDeviceModel(Build.MODEL);
         params.setUniqueCode(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
         params.setNumber(phoneNumber);
 
-        Log.d("payment", "getParamsInformation: "+new Gson().toJson(params));
+        if(phoneNumber!=null && !phoneNumber.isEmpty()){
+            params.setOperator(Func.isNumberMci(phoneNumber)?"MCI":"MTN");
+        }
 
         return params;
     }

@@ -27,6 +27,9 @@ public class ParamsRegisterInformation {
     @SerializedName("Number")
     @Expose
     private String number;
+    @SerializedName("Operator")
+    @Expose
+    private String operator;
 
     public String getDeviceName() {
         return deviceName;
@@ -84,4 +87,11 @@ public class ParamsRegisterInformation {
         this.number = number;
     }
 
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
 }

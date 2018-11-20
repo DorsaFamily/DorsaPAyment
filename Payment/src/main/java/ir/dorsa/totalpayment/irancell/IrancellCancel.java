@@ -86,6 +86,10 @@ public class IrancellCancel {
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
         sharedPrefereceEditor.putString(IMPayment.SH_P_BUY_IN_APP_ACCESS_TOKEN, null);
 
+        Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_INSTALL_KEY, false);
+        Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_ACTIVE_KEY, false);
+        Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_DEACTIVE_KEY, false);
+
         sharedPrefereceEditor.putString(IMPayment.SH_P_BUY_IN_APP_PHONE_NUMBER, "");
 
         sharedPrefereceEditor.putBoolean(IMPayment.SH_P_BUY_IN_APP_HAS_KEY, false);

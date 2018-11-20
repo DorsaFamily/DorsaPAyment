@@ -418,6 +418,7 @@ public class PPayment implements IPPayment {
 
                             if (mIsPremium) {
                                 mBuy.savePhoneNumber(phoneNumber);
+                                new RegisterInfo(getContext()).active(phoneNumber);
                                 ivBuy.onSuccessPurchaseIrancell("با تشکر از شما \nسرویس شما در تاریخ " + mBuy.getPersianDate() + " فعال گردید");
                             } else {
                                 try {
@@ -453,6 +454,7 @@ public class PPayment implements IPPayment {
 
                                                     if (purchase.getSku().equals(SKU_PREMIUM)) {
                                                         mBuy.savePhoneNumber(phoneNumber);
+                                                        new RegisterInfo(getContext()).active(phoneNumber);
                                                         mBuy.saveBuyDetails();
                                                         ivBuy.onSuccessPurchaseIrancell("با تشکر از شما \nسرویس شما در تاریخ " + mBuy.getPersianDate() + " فعال گردید");
                                                     }
