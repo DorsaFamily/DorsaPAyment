@@ -9,6 +9,7 @@ import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
+import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.Func;
 import ir.dorsa.totalpayment.tools.Utils;
 
@@ -88,6 +89,7 @@ public class Payment {
         PPayment pPayment = new PPayment(ivPayment, appCode, productCode, sku);
         pPayment.setContext(context);
         pPayment.checkStatus();
+        new RegisterInfo(context).install();
     }
 
 

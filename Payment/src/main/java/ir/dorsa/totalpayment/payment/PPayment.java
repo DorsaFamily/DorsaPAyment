@@ -128,7 +128,6 @@ public class PPayment implements IPPayment {
     protected void checkStatus() {
 
         if (mBuy.getPhoneNumber().isEmpty()) {
-            new RegisterInfo(getContext()).install();
             onFailedCheckStatus(1, "empty phone number");
             return;
         }
