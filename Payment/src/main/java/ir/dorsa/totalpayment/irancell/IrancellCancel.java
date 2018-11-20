@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import java.util.concurrent.TimeUnit;
 
+import ir.dorsa.totalpayment.BuildConfig;
 import ir.dorsa.totalpayment.payment.IMPayment;
 import ir.dorsa.totalpayment.payment.PPayment;
 import ir.dorsa.totalpayment.payment.Payment;
@@ -36,13 +37,20 @@ public class IrancellCancel {
     private static Retrofit retrofitChaharkhone;
     public static Retrofit getClientChaharkhone() {
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
-                .connectTimeout(10, TimeUnit.SECONDS).addInterceptor(loggingInterceptor)
-                .build();
+                .connectTimeout(10, TimeUnit.SECONDS)
+                ;
+
+        if(BuildConfig.DEBUG){
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okHttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
+
+        final OkHttpClient okHttpClient=okHttpClientBuilder.build();
 
         if (retrofitChaharkhone == null) {
             retrofitChaharkhone = new Retrofit.Builder()

@@ -41,7 +41,6 @@ public class SmsListener extends BroadcastReceiver {
                             in.putExtra("code", msgBody);
                             LocalBroadcastManager.getInstance(context).sendBroadcast(in);
 */
-                            Log.d("ddddddddd", "onReceive: " + msgBody);
                             Intent in = new Intent(BROADCAST_UPDATE);
                             in.putExtra("code", stripNonDigits(msgBody));
                             LocalBroadcastManager.getInstance(context).sendBroadcast(in);

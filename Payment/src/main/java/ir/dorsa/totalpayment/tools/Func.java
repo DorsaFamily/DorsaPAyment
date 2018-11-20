@@ -1,7 +1,5 @@
 package ir.dorsa.totalpayment.tools;
 
-import android.util.Log;
-
 public class Func {
 
     public static boolean isNumberMci(String phoneNumber) {
@@ -17,8 +15,7 @@ public class Func {
                 replace("۸", "8").
                 replace("۹", "9");
 
-        Log.d("AppPayment.TAG", "isNumberMci: " + phoneNumber + ":" + (phoneNumber.startsWith("091") ||
-                phoneNumber.startsWith("099")));
+
 
         if (phoneNumber.startsWith("091") ||
                 phoneNumber.startsWith("099")

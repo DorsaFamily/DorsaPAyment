@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import ir.dorsa.totalpayment.BuildConfig;
 import ir.dorsa.totalpayment.payment.models.ResponseAuthentication;
 import ir.dorsa.totalpayment.payment.models.ResponseAuthenticationRequest;
 import ir.dorsa.totalpayment.payment.models.ResponseSubscribeSecend;
@@ -56,13 +57,22 @@ public class MPayment implements IMPayment {
         setContext(ipBuy.getContext());
 
         setContext(ipBuy.getContext());
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+
+
+        final OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(50, TimeUnit.SECONDS)
-                .connectTimeout(30, TimeUnit.SECONDS).addInterceptor(loggingInterceptor)
-                .build();
+                .connectTimeout(30, TimeUnit.SECONDS)
+                ;
+
+
+        if(BuildConfig.DEBUG){
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okHttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
+
+        final OkHttpClient okHttpClient=okHttpClientBuilder.build();
 
         if (clientRetrofit == null) {
             clientRetrofit = new Retrofit.Builder()
@@ -209,9 +219,7 @@ public class MPayment implements IMPayment {
                 } else {
                     try {
                         String errorResponse = response.errorBody().string();
-                        Log.d("", "Error is ->" + errorResponse);
                         JSONObject joError = new JSONObject(errorResponse);
-                        //Log.d(AppPayment.LOG_TAG,"message is sendKey :2:"+joError.toString());
                         if ("POL0510".equals(joError.getString("status"))) {
                             ipBuy.onFailedSendPhoneNumber(joError.getString("message"));
                         } else if ("SVC0001".equals(joError.getString("status"))) {
@@ -345,7 +353,6 @@ public class MPayment implements IMPayment {
             @Override
             public void onResponse(Call<ResponseSubscribeSecend> call, Response<ResponseSubscribeSecend> response) {
                 if (response.code() == 200) {
-                    //Log.d(AppPayment.LOG_TAG,"message is subscribe :"+response.body().getStatus());
                     if ("0".equals(response.body().getStatus()) || "POL0503".equals(response.body().getStatus())) {
 
                         savePhoneNumber(phoneNumber);
@@ -361,7 +368,6 @@ public class MPayment implements IMPayment {
                 } else {
                     try {
                         String strError = response.errorBody().string();
-                        //Log.d(AppPayment.LOG_TAG,"error is :"+strError);
                         if (strError.contains("POL0503")) {
                             saveBuyDetails();
                             ipBuy.onSuccessSubscribe("با تشکر از شما\nسرویس دنیای درسا برای شما از قبل فعال می باشد");
@@ -421,7 +427,6 @@ public class MPayment implements IMPayment {
                         JSONObject joError = new JSONObject(response.errorBody().string());
                         clearUserInfo();
                         ipBuy.onFailedCheckStatus(3, joError.getString("message"));
-                        //Log.d(AppPayment.LOG_TAG, "phone number is :" + joError.getString("message"));
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                         clearUserInfo();

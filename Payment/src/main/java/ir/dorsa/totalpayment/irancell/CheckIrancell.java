@@ -1,14 +1,13 @@
 package ir.dorsa.totalpayment.irancell;
 
 import android.content.Context;
-import android.util.Log;
-
-import ir.dorsa.totalpayment.tools.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import ir.dorsa.totalpayment.BuildConfig;
+import ir.dorsa.totalpayment.tools.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -28,13 +27,18 @@ public class CheckIrancell {
     private static Retrofit retrofitChaharkhone;
     public static Retrofit getClientChaharkhone() {
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
-                .connectTimeout(10, TimeUnit.SECONDS).addInterceptor(loggingInterceptor)
-                .build();
+                .connectTimeout(10, TimeUnit.SECONDS)
+                ;
+        if(BuildConfig.DEBUG){
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okHttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
+
+        final OkHttpClient okHttpClient=okHttpClientBuilder.build();
 
         if (retrofitChaharkhone == null) {
             retrofitChaharkhone = new Retrofit.Builder()
@@ -60,7 +64,6 @@ public class CheckIrancell {
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.d("CheckIrancell", "onResponse: "+response);
 
                 if (response.code() == 200) {
 

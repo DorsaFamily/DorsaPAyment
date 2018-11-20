@@ -2,7 +2,6 @@ package ir.dorsa.totalpayment.payment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.android.billingclient.util.IabHelper;
 import com.android.billingclient.util.IabResult;
@@ -62,10 +61,6 @@ public class PPayment implements IPPayment {
             Date parsedDate = df_input.parse(mBuy.getExpiredDate());
             cal.setTime(parsedDate);
             Calendar calNow = Calendar.getInstance();
-
-            Log.d("", "expired time is :" + mBuy.getExpiredDate());
-            Log.d("", "expired time now is :" + calNow.getTimeInMillis());
-            Log.d("", "expired time expire is :" + cal.getTimeInMillis());
 
             result = (calNow.getTimeInMillis() < cal.getTimeInMillis() ? false : true);
 

@@ -5,7 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.util.Log;
 
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +16,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import ir.dorsa.totalpayment.BuildConfig;
 import ir.dorsa.totalpayment.registerInformation.model.ParamsRegisterInformation;
 import ir.dorsa.totalpayment.tools.Func;
 import ir.dorsa.totalpayment.tools.Utils;
@@ -64,7 +64,6 @@ public class RegisterInfo {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.d("Payment", "onResponse: "+response.code());
                     if (response.code() == 200) {
                         Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_INSTALL_KEY, true);
                     }
@@ -189,21 +188,24 @@ public class RegisterInfo {
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .sslSocketFactory(sslSocketFactory)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .connectTimeout(10, TimeUnit.SECONDS)
-                    .addInterceptor(loggingInterceptor)
                     .hostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }
             });
+
+            if(BuildConfig.DEBUG){
+                HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                builder.addInterceptor(loggingInterceptor);
+            }
 
             OkHttpClient okHttpClient = builder.build();
 
