@@ -152,10 +152,12 @@ public class RegisterInfo {
         params.setDeviceName(Build.MANUFACTURER);
         params.setDeviceModel(Build.MODEL);
         params.setUniqueCode(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-        params.setNumber(phoneNumber);
+        params.setNumber((phoneNumber==null?"":phoneNumber));
 
         if(phoneNumber!=null && !phoneNumber.isEmpty()){
             params.setOperator(Func.isNumberMci(phoneNumber)?"MCI":"MTN");
+        }else{
+            params.setOperator("");
         }
 
         return params;

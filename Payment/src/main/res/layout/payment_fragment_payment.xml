@@ -9,5 +9,6 @@
         android:layout_height="match_parent"
         android:src="@drawable/paymrnt_bgr"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         />
 </RelativeLayout>

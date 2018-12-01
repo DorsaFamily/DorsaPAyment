@@ -9,11 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
+import ir.dorsa.totalpayment.payment.Payment;
 
 
 public class DialogSendPhoneNumber extends Dialog {
@@ -26,8 +27,8 @@ public class DialogSendPhoneNumber extends Dialog {
 
     private TextView titleSendPhoneNumber;
 
-    private Button btnPhoneNumberAcept;
-    private Button btnPhoneNumberBack;
+    private View btnPhoneNumberAcept;
+    private View btnPhoneNumberBack;
 
     public DialogSendPhoneNumber(@NonNull Context context) {
         super(context, android.R.style.Theme_Holo_Dialog_NoActionBar);
@@ -55,6 +56,21 @@ public class DialogSendPhoneNumber extends Dialog {
     }
 
     private void init() {
+        if(Payment.isFullScreen){
+            setCanceledOnTouchOutside(false);
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+
+
         setContentView(R.layout.payment_dialog_register_phone);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 

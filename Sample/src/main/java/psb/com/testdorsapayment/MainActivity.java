@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {//غیر فعال می باشد
                             Intent intentDorsaPayment = payment.getPaymentIntent(
+                                    true,
+                                    true,
                                     "متن ارسال شماره موبایل",
                                     appCode,
                                     productCode,

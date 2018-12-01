@@ -9,6 +9,7 @@
         android:layout_centerInParent="true"
         android:textSize="14sp"
         android:text="صفحه ۲"
+        android:textColor="@color/white"
         />
 
 </RelativeLayout>

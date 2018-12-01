@@ -19,6 +19,8 @@ import static ir.dorsa.totalpayment.payment.IMPayment.SH_P_BUY_IN_APP_PHONE_NUMB
 
 public class Payment {
     public static final String KEY_TEXT_SEND_PHONE_NUMBER = "KEY_TEXT_SEND_PHONE_NUMBER";
+    public static final String KEY_IS_LANDSCAP = "KEY_IS_LANDSCAP";
+    public static final String KEY_IS_FULLSCREEN = "KEY_IS_FULLSCREEN";
     public static final String KEY_APP_CODE = "KEY_APP_CODE";
     public static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
     public static final String KEY_MARKET_ID = "KEY_MARKET_ID";
@@ -26,7 +28,9 @@ public class Payment {
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
 
-    private  Context context;
+    public static boolean isFullScreen = false;
+
+    private Context context;
 
     private String marketId;
 
@@ -34,7 +38,7 @@ public class Payment {
         this.context = context;
         try {
             CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context));
-        }catch (Exception ex){
+        } catch (Exception ex) {
         }
     }
 
@@ -42,11 +46,12 @@ public class Payment {
 
     /**
      * متد دریافت intent فراخوانی پرداخت
+     *
      * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
-     * @param appCode شماره کد دریافت شده از درسا برای برنامه (اجباری)
-     * @param productCode شماره محصول دریافت شده از درسا برای برنامه (اجباری)
-     * @param irancellSku شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
-     * @param splashLayoutResource  آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
+     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
     public Intent getPaymentIntent(
             String textSendPhoneNumber,
@@ -56,14 +61,79 @@ public class Payment {
             int[] splashLayoutResource
 
     ) {
+
+        return getPaymentIntent(
+                false,
+                textSendPhoneNumber,
+                appCode,
+                productCode,
+                irancellSku,
+                splashLayoutResource);
+    }
+
+    /**
+     * متد دریافت intent فراخوانی پرداخت
+     *
+     * @param isLandscape          آیا برنامه به صورت افقی اجرا می شود
+     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
+     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
+     */
+    public Intent getPaymentIntent(
+            boolean isLandscape,
+            String textSendPhoneNumber,
+            String appCode,
+            String productCode,
+            String irancellSku,
+            int[] splashLayoutResource
+
+    ) {
+        return getPaymentIntent(
+                isLandscape,
+                false,
+                textSendPhoneNumber,
+                appCode,
+                productCode,
+                irancellSku,
+                splashLayoutResource);
+    }
+
+    /**
+     * متد دریافت intent فراخوانی پرداخت
+     *
+     * @param isLandscape          آیا برنامه به صورت افقی اجرا می شود
+     * @param isFullScreen         آیا برنامه تمام صفحه ایجاد شود
+     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
+     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
+     */
+    public Intent getPaymentIntent(
+            boolean isLandscape,
+            boolean isFullScreen,
+            String textSendPhoneNumber,
+            String appCode,
+            String productCode,
+            String irancellSku,
+            int[] splashLayoutResource
+
+    ) {
+        this.isFullScreen = isFullScreen;
+
         Intent intent = new Intent(context, PaymentActivity.class);
+
+        intent.putExtra(KEY_IS_LANDSCAP, isLandscape);
+        intent.putExtra(KEY_IS_FULLSCREEN, isFullScreen);
         intent.putExtra(KEY_TEXT_SEND_PHONE_NUMBER, textSendPhoneNumber);
         intent.putExtra(KEY_APP_CODE, appCode);
         intent.putExtra(KEY_PRODUCT_CODE, productCode);
         intent.putExtra(KEY_SKU, irancellSku);
         intent.putExtra(KEY_SPLASH, splashLayoutResource);
 
-        if(getMarketId()!=null){
+        if (getMarketId() != null) {
             intent.putExtra(KEY_MARKET_ID, getMarketId());
         }
 
@@ -71,12 +141,12 @@ public class Payment {
     }
 
 
-
     /**
      * متد بررسی وضعیت اشتراک کاربر
-     * @param appCode شماره کد دریافت شده از درسا برای برنامه (اجباری)
-     * @param productCode شماره محصول دریافت شده از درسا برای برنامه (اجباری)
-     * @param sku شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     *
+     * @param appCode         شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode     شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param sku             شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
      * @param onCheckFinished اینترفیس تکمیل بررسی
      */
     public void checkStatus(
@@ -93,24 +163,24 @@ public class Payment {
     }
 
 
-    public void setEnableIrancell(boolean isEnable){
+    public void setEnableIrancell(boolean isEnable) {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
-        sharedPrefereceEditor.putBoolean(SH_P_BUY_IN_APP_ENABLE_IRANCELL , isEnable);
+        sharedPrefereceEditor.putBoolean(SH_P_BUY_IN_APP_ENABLE_IRANCELL, isEnable);
         sharedPrefereceEditor.commit();
     }
 
     /**
-     *بررسی ایرانسلی بودن کاربر
+     * بررسی ایرانسلی بودن کاربر
      */
     public boolean isUserIrancell(
-            ) {
+    ) {
         PPayment pPayment = new PPayment(ivPayment, "", "", "");
         return !pPayment.getPhoneNumber().isEmpty() && Func.isNumberIrancell(pPayment.getPhoneNumber());
     }
 
     /**
-     *بررسی ثبت نام کاربر
+     * بررسی ثبت نام کاربر
      */
     public boolean isUserPremium(
     ) {
@@ -119,11 +189,11 @@ public class Payment {
     }
 
     /**
-     *نمایش اینکه آیا به کاربر دکمه انصراف از خرید را نمایش دهد
+     * نمایش اینکه آیا به کاربر دکمه انصراف از خرید را نمایش دهد
      */
-    public boolean showCancelSubscribtion(){
+    public boolean showCancelSubscribtion() {
         PPayment pPayment = new PPayment(ivPayment, "", "", "");
-        if(isUserIrancell() && !pPayment.getHasKey()){
+        if (isUserIrancell() && !pPayment.getHasKey()) {
             return true;
         }
 
@@ -139,7 +209,7 @@ public class Payment {
     }
 
 
-    public void cancelIrancell(String irancellSku,IrancellCancel.onIrancellCanceled getResult){
+    public void cancelIrancell(String irancellSku, IrancellCancel.onIrancellCanceled getResult) {
         IrancellCancel irancellCancel = new IrancellCancel(context, getResult);
         irancellCancel.cancelPurchase(irancellSku);
     }
@@ -154,12 +224,12 @@ public class Payment {
     }
 
     @Deprecated
-    public String getPhoneNumber(Context context){
+    public String getPhoneNumber(Context context) {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
 
-    public String getPhoneNumber(){
+    public String getPhoneNumber() {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
@@ -167,6 +237,7 @@ public class Payment {
     private void setOnCheckFinished(Payment.onCheckFinished onCheckFinished) {
         this.onCheckFinished = onCheckFinished;
     }
+
     protected IVPayment ivPayment = new IVPayment() {
         @Override
         public Context getContext() {

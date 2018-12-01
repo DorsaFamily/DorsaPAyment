@@ -9,11 +9,16 @@
 
     <application
         android:allowBackup="true">
+
         <activity android:name=".PaymentActivity"
+            android:theme="@style/PaymentTranslucentTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/PaymentTheme"
             >
         </activity>
+
+
+
         <receiver android:name=".service.SmsListener">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
