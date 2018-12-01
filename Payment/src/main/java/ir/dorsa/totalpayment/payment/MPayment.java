@@ -98,6 +98,14 @@ public class MPayment implements IMPayment {
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
 
+    protected String getReferenceCode(){
+        return Utils.getStringPreference(getContext(), "reference_code", "reference_code", "");
+    }
+
+    protected String getIrancellToken(){
+        return Utils.getStringPreference(context,Utils.PURCHASETOKEN, Utils.PURCHASETOKENKEY,"");
+    }
+
     public String getLocalPhoneNumber() {
         return phoneNumber;
     }
@@ -170,7 +178,6 @@ public class MPayment implements IMPayment {
         sharedPrefereceEditor.commit();
     }
 
-
     public void setHasKey(boolean hasKey) {
 
         SharedPreferences sharedPrefrece = getContext().getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
@@ -184,7 +191,6 @@ public class MPayment implements IMPayment {
         SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
         return sharedPrefrece.getBoolean(SH_P_BUY_IN_APP_HAS_KEY, false);
     }
-
 
     private String getDate() {
         Calendar cal = Calendar.getInstance();
@@ -398,8 +404,11 @@ public class MPayment implements IMPayment {
     public void checkStatus() {
 
         interfaceSubscribe apiService = clientRetrofit.create(interfaceSubscribe.class);
-        Call<ResponseSubscribeSecend> call = apiService.subscribe_2(
-                getPhoneNumber(), "" + appCode, Utils.getStringPreference(getContext(), "reference_code", "reference_code", ""), productCode
+        Call<ResponseSubscribeSecend> call =
+                apiService.subscribe_2(getPhoneNumber(),
+                        "" + appCode,
+                        getReferenceCode(),
+                        productCode
         );
         call.enqueue(new Callback<ResponseSubscribeSecend>() {
             @Override

@@ -234,6 +234,16 @@ public class Payment {
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
 
+    public String getReferenceCode(){
+        PPayment pPayment = new PPayment(ivPayment, "", "", "");
+        return pPayment.getReferenceCode();
+    }
+
+    public String getIrancelToken(){
+        PPayment pPayment = new PPayment(ivPayment, "", "", "");
+        return pPayment.getIrancellToken();
+    }
+
     private void setOnCheckFinished(Payment.onCheckFinished onCheckFinished) {
         this.onCheckFinished = onCheckFinished;
     }

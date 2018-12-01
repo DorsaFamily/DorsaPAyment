@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private String irancellSku = "12345";
     private String MarketingId = "12345";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
     }
 
     @Override
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "پرداخت موفق", Toast.LENGTH_SHORT).show();
-                Payment payment = new Payment(this);
             } else {
                 Toast.makeText(this, "اشکال در پرداخت به دلیل " + data.getStringExtra("message"), Toast.LENGTH_SHORT).show();
                 finish();

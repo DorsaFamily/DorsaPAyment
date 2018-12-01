@@ -44,6 +44,22 @@ public class PPayment implements IPPayment {
         return mBuy.getPhoneNumber();
     }
 
+    protected String getReferenceCode() {
+        if (Func.isNumberMci(mBuy.getPhoneNumber())) {
+            return mBuy.getReferenceCode();
+        } else if (Func.isNumberIrancell(mBuy.getPhoneNumber()) && mBuy.getHasKey()) {
+            return mBuy.getReferenceCode();
+        }
+        return null;
+    }
+
+    protected String getIrancellToken() {
+        if (Func.isNumberIrancell(mBuy.getPhoneNumber()) && !mBuy.getHasKey()) {
+            return mBuy.getIrancellToken();
+        }
+        return null;
+    }
+
     public String getLocalPhoneNumber() {
         return mBuy.getLocalPhoneNumber();
     }
@@ -359,7 +375,7 @@ public class PPayment implements IPPayment {
         if (mHelper != null) {
             try {
                 mHelper.dispose();
-                mHelper=null;
+                mHelper = null;
             } catch (IabHelper.IabAsyncInProgressException e) {
                 e.printStackTrace();
             }
