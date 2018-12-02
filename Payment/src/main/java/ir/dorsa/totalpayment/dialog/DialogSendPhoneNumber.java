@@ -1,24 +1,28 @@
 package ir.dorsa.totalpayment.dialog;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
-import ir.dorsa.totalpayment.payment.Payment;
 
 
-public class DialogSendPhoneNumber extends Dialog {
+public class DialogSendPhoneNumber extends Fragment {
 
+    public static final String TAG_FRG_SEND_PHONE_NUMBER="TAG_FRG_SEND_PHONE_NUMBER";
+
+    private static final String KEY_MESSAGE = "KEY_MESSAGE";
+    private static final String KEY_PHONE_NUMBER = "KEY_PHONE_NUMBER";
+    private static final String KEY_ERROR_MESSAGE = "KEY_ERROR_MESSAGE";
+    private static final String KEY_HAS_KEY = "KEY_HAS_KEY";
     private interactionPhoneNumber mListener;
 
     private EditText textPhoneNumber;
@@ -30,59 +34,70 @@ public class DialogSendPhoneNumber extends Dialog {
     private View btnPhoneNumberAcept;
     private View btnPhoneNumberBack;
 
-    public DialogSendPhoneNumber(@NonNull Context context) {
-        super(context, android.R.style.Theme_Holo_Dialog_NoActionBar);
-        init();
-    }
+    private View pView;
 
-    public DialogSendPhoneNumber(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
-        init();
-    }
+    private String message = "";
+    private String phoneNumber = "";
+    private String error = "";
+    private boolean hasKey = false;
 
-    protected DialogSendPhoneNumber(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-        init();
+
+    public DialogSendPhoneNumber getInstance(
+            String message,
+            String phoneNumber,
+            String errorMessage,
+            boolean hasKey
+    ) {
+        DialogSendPhoneNumber dialogSendPhoneNumber = new DialogSendPhoneNumber();
+        Bundle args = new Bundle();
+        args.putString(KEY_MESSAGE, message);
+        args.putString(KEY_PHONE_NUMBER, phoneNumber);
+        args.putString(KEY_ERROR_MESSAGE, errorMessage);
+        args.putBoolean(KEY_HAS_KEY, hasKey);
+        dialogSendPhoneNumber.setArguments(args);
+
+        return dialogSendPhoneNumber;
     }
 
     @Override
-    public void show() {
-        hideError();
-        super.show();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            message = savedInstanceState.getString(KEY_MESSAGE, "");
+            phoneNumber = savedInstanceState.getString(KEY_PHONE_NUMBER, "");
+            error = savedInstanceState.getString(KEY_ERROR_MESSAGE, "");
+            hasKey = savedInstanceState.getBoolean(KEY_ERROR_MESSAGE, false);
+        }
+
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        pView = inflater.inflate(R.layout.payment_dialog_register_phone, container, false);
+        init();
+        return pView;
+    }
+
 
     public void setListener(interactionPhoneNumber mListener) {
         this.mListener = mListener;
     }
 
+
+
+
     private void init() {
-        if(Payment.isFullScreen){
-            setCanceledOnTouchOutside(false);
 
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        textPhoneNumber = pView.findViewById(R.id.dialog_register_phone_number);
+        textPhoneNumberHint = pView.findViewById(R.id.dialog_register_hint);
+        textPhoneNumberHasKey = pView.findViewById(R.id.dialog_register_has_key);
 
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        }
+        btnPhoneNumberAcept = pView.findViewById(R.id.dialog_register_btn_send);
+        btnPhoneNumberBack = pView.findViewById(R.id.dialog_register_btn_cancel);
 
+        titleSendPhoneNumber = pView.findViewById(R.id.title_register);
 
-        setContentView(R.layout.payment_dialog_register_phone);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-
-        textPhoneNumber = findViewById(R.id.dialog_register_phone_number);
-        textPhoneNumberHint = findViewById(R.id.dialog_register_hint);
-        textPhoneNumberHasKey = findViewById(R.id.dialog_register_has_key);
-
-        btnPhoneNumberAcept = findViewById(R.id.dialog_register_btn_send);
-        btnPhoneNumberBack = findViewById(R.id.dialog_register_btn_cancel);
-
-        titleSendPhoneNumber= findViewById(R.id.title_register);
+        refreshViews();
 
 
         textPhoneNumberHasKey.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +109,7 @@ public class DialogSendPhoneNumber extends Dialog {
                     showError("لطفا شماره موبایل را به صورت صحیح وارد نمایید");
                 } else if (textPhoneNumber.getText().length() < 11) {
                     showError("لطفا شماره موبایل را به صورت صحیح وارد نمایید");
-                } else if(mListener!=null){
+                } else if (mListener != null) {
                     mListener.hasKey(textPhoneNumber.getText().toString());
                 }
 
@@ -128,7 +143,6 @@ public class DialogSendPhoneNumber extends Dialog {
         btnPhoneNumberBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancel();
                 if (mListener != null) {
                     mListener.cancelSendPhoneNumber();
                 }
@@ -137,15 +151,62 @@ public class DialogSendPhoneNumber extends Dialog {
 
     }
 
-    public void setMessage(String message){
-        titleSendPhoneNumber.setText(message);
+
+
+
+
+    public void refreshViews() {
+        applyMessage();
+        applyPhoneNumber(this.phoneNumber);
+        applyError(error);
+        applyHasKey(hasKey);
+
     }
 
-    public void setPhoneNumber(String phoneNumber){
-        textPhoneNumber.setText(phoneNumber);
+    private void applyMessage() {
+        if (titleSendPhoneNumber != null) {
+            titleSendPhoneNumber.setText(this.message);
+        }
     }
 
-    public void showError(String errorMessage) {
+    private void applyPhoneNumber(String phoneNumber) {
+        if (textPhoneNumber != null) {
+            textPhoneNumber.setText(phoneNumber);
+        }
+    }
+
+    private void applyError(String error) {
+        if (error != null && !error.isEmpty()) {
+            showError(error);
+        } else {
+            hideError();
+        }
+    }
+
+
+    private void applyHasKey(boolean show) {
+        if (textPhoneNumberHasKey != null) {
+            textPhoneNumberHasKey.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setHasKey(boolean hasKey) {
+        this.hasKey = hasKey;
+    }
+
+    private void showError(String errorMessage) {
         if (textPhoneNumberHint != null) {
             textPhoneNumberHint.setText(errorMessage);
             textPhoneNumberHint.setVisibility(View.VISIBLE);
@@ -153,14 +214,10 @@ public class DialogSendPhoneNumber extends Dialog {
     }
 
 
-    public void hideError() {
+    private void hideError() {
         if (textPhoneNumberHint != null) {
             textPhoneNumberHint.setVisibility(View.GONE);
         }
-    }
-
-    public void doShowHasKey(boolean show) {
-        textPhoneNumberHasKey.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
 

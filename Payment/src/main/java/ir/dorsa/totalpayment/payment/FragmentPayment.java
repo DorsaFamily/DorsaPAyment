@@ -2,15 +2,12 @@ package ir.dorsa.totalpayment.payment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +26,6 @@ import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_SKU;
-import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
 public class FragmentPayment extends Fragment implements IVPayment {
 
@@ -122,7 +118,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
         pDialog = new ProgressDialog(getContext());
         pDialog.setMessage("لطفا صبور باشید...");
 
-        dialogSendPhoneNumber = new DialogSendPhoneNumber(getContext());
+        dialogSendPhoneNumber = new DialogSendPhoneNumber();
         dialogSendPhoneNumber.setListener(new DialogSendPhoneNumber.interactionPhoneNumber() {
             @Override
             public void requestPermission(String phoneNumber) {
@@ -134,12 +130,12 @@ public class FragmentPayment extends Fragment implements IVPayment {
             public void hasKey(String phoneNumber) {
                 if(pPayment.checkPhoneNumber(phoneNumber)) {
                     FragmentPayment.this.phoneNumber = phoneNumber;
-                    dialogSendPhoneNumber.cancel();
+                    dismissSendNumberDialog();
                     dialogSendKey.setPhoneNumber(phoneNumber);
                     dialogSendKey.setMessage(getContext().getString(R.string.desc_send_has_key));
                     pPayment.setPhoneNumber(phoneNumber);
                     pPayment.setHasKey(true);
-                    dialogSendKey.show();
+                    showSendKeyDialog();
                 }
             }
 
@@ -150,22 +146,23 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
             @Override
             public void cancelSendPhoneNumber() {
+                dismissSendNumberDialog();
                 if (mListener != null) {
                     mListener.onBackPressed();
                 }
             }
         });
         dialogSendPhoneNumber.setMessage(textSendPhonenumber);
-        dialogSendPhoneNumber.setCancelable(false);
 
 
-        dialogSendKey = new DialogSendKey(getContext());
+
+        dialogSendKey = new DialogSendKey();
         dialogSendKey.setListener(new DialogSendKey.interactionSendKey() {
             @Override
             public void changePhoneNumber() {
-                dialogSendKey.cancel();
+                dismissSendKey();
                 pPayment.setHasKey(false);
-                dialogSendPhoneNumber.show();
+                showSendNumberDialog();
             }
 
             @Override
@@ -175,27 +172,69 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
             @Override
             public void cancelSendKey() {
+                dismissSendKey();
                 pPayment.setHasKey(false);
-                dialogSendPhoneNumber.show();
+                showSendNumberDialog();
             }
         });
         dialogSendKey.setMessage(getString(R.string.desc_send_code));
-        dialogSendKey.setCancelable(false);
+
 
 
         if (!"-1".equals(pPayment.getPhoneNumber())) {
             dialogSendPhoneNumber.setPhoneNumber(pPayment.getPhoneNumber());
-            dialogSendPhoneNumber.doShowHasKey(true);
+            dialogSendPhoneNumber.setHasKey(true);
         } else {
             dialogSendPhoneNumber.setPhoneNumber("");
-            dialogSendPhoneNumber.doShowHasKey(false);
+            dialogSendPhoneNumber.setHasKey(false);
         }
 
         pPayment.setHasKey(false);
-        dialogSendPhoneNumber.show();
+
+        showSendNumberDialog();
 
         return pView;
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Numbering show dismiss
+    ///////////////////////////////////////////////////////////////////////////
+    private void showSendNumberDialog(){
+        getChildFragmentManager()
+                .beginTransaction()
+                .add(R.id.frame_fragment,dialogSendPhoneNumber,dialogSendPhoneNumber.TAG_FRG_SEND_PHONE_NUMBER)
+                .commitAllowingStateLoss();
+    }
+
+    private void dismissSendNumberDialog(){
+        getChildFragmentManager()
+                .beginTransaction()
+                .remove(
+                        dialogSendPhoneNumber
+                ).commitAllowingStateLoss();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // send key show dismiss
+    ///////////////////////////////////////////////////////////////////////////
+    private void showSendKeyDialog(){
+        dialogSendKey.setError(null);
+        dialogSendKey.applyError();
+        getChildFragmentManager()
+                .beginTransaction()
+                .add(R.id.frame_fragment,dialogSendKey,dialogSendKey.TAG_FRG_SEND_KEY)
+                .commitAllowingStateLoss();
+    }
+
+    private void dismissSendKey(){
+        getChildFragmentManager()
+                .beginTransaction()
+                .remove(
+                        dialogSendKey
+                ).commitAllowingStateLoss();
+    }
+
 
 
     @Override
@@ -209,40 +248,45 @@ public class FragmentPayment extends Fragment implements IVPayment {
     @Override
     public void onStartSendPhoneNumber() {
         pDialog.show();
-        dialogSendPhoneNumber.hideError();
+        dialogSendPhoneNumber.setError(null);
+        dialogSendPhoneNumber.refreshViews();
     }
 
     @Override
     public void onSuccessSendPhoneNumber() {
+        dismissSendNumberDialog();
+
         pDialog.cancel();
-        dialogSendPhoneNumber.cancel();
         dialogSendKey.setPhoneNumber(pPayment.getLocalPhoneNumber());
         dialogSendKey.setMessage(getContext().getString(R.string.desc_send_code));
-        dialogSendKey.show();
+        showSendKeyDialog();
     }
 
     @Override
     public void onFailedSendPhoneNumber(String errorMessage) {
-        dialogSendPhoneNumber.showError(errorMessage);
+        dialogSendPhoneNumber.setError(errorMessage);
+        dialogSendPhoneNumber.refreshViews();
         pDialog.cancel();
     }
 
     @Override
     public void onStartSendKey() {
-        dialogSendKey.hideError();
+        dialogSendKey.setError(null);
+        dialogSendKey.applyError();
         pDialog.show();
     }
 
     @Override
     public void onFailedSendKey(String errorMessage) {
         pDialog.cancel();
-        dialogSendKey.showError(errorMessage);
+        dialogSendKey.setError(errorMessage);
+        dialogSendKey.applyError();
     }
 
     @Override
     public void onSuccessSubscribe(String expiredDate) {
         pDialog.cancel();
-        dialogSendKey.cancel();
+        dismissSendKey();
 
         DialogMessage dialogMessage=new DialogMessage(getContext());
         dialogMessage.setMessage(expiredDate);
@@ -263,7 +307,8 @@ public class FragmentPayment extends Fragment implements IVPayment {
     @Override
     public void onFailedSubscribe(String errorMessage) {
         pDialog.cancel();
-        dialogSendKey.showError(errorMessage);
+        dialogSendKey.setError(errorMessage);
+        dialogSendKey.applyError();
     }
 
     @Override
@@ -283,8 +328,8 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
     @Override
     public void onStartPurchaseIrancell() {
-        dialogSendPhoneNumber.hideError();
-        dialogSendPhoneNumber.cancel();
+        dialogSendPhoneNumber.setError(null);
+        dismissSendNumberDialog();
         pDialog.show();
     }
 
@@ -311,10 +356,11 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
     @Override
     public void onFailedpurchaseIrancell(String message) {
+        dialogSendPhoneNumber.setError(message);
+        showSendNumberDialog();
+
         pDialog.cancel();
-        dialogSendPhoneNumber.showError(message);
         pPayment.setHasKey(false);
-        dialogSendPhoneNumber.show();
 
         pPayment.disposeHelper();
     }
@@ -327,27 +373,6 @@ public class FragmentPayment extends Fragment implements IVPayment {
             mListener = (interactionPayment) context;
         }
     }
-
-    @Override
-    public void onPause() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(onGotKey);
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        IntentFilter iff = new IntentFilter(BROADCAST_UPDATE);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(onGotKey, iff);
-        super.onResume();
-    }
-
-    private BroadcastReceiver onGotKey = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            dialogSendKey.setKey(intent.getStringExtra("code"));
-            pPayment.doSendKey(intent.getStringExtra("code"));
-        }
-    };
 
 
     @Override

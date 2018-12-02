@@ -1,24 +1,30 @@
 package ir.dorsa.totalpayment.dialog;
 
-import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
-import ir.dorsa.totalpayment.payment.Payment;
+
+import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
 
-public class DialogSendKey extends Dialog {
+public class DialogSendKey extends Fragment {
+
+    public static final String TAG_FRG_SEND_KEY = "TAG_FRG_SEND_KEY";
 
     private TextView textKeyChangeNumber;
     private TextView textKeyTitle;
-    private TextView textKeyHint;
+    private TextView textError;
     private EditText textKeyKey;
     private TextView textDescSendKey;
     private View btnKeySend;
@@ -26,59 +32,30 @@ public class DialogSendKey extends Dialog {
 
     private interactionSendKey mListener;
 
+    private String phoneNumber;
+    private String message;
+    private String error;
 
-    public void setListener(interactionSendKey mListener) {
-        this.mListener = mListener;
-    }
 
-    public DialogSendKey(@NonNull Context context) {
-        super(context, android.R.style.Theme_Holo_Dialog_NoActionBar);
-        init();
-    }
-
-    public DialogSendKey(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
-        init();
-    }
-
-    protected DialogSendKey(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-        init();
-    }
-
+    private View pView;
 
     @Override
-    public void show() {
-        hideError();
-        super.show();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        pView = inflater.inflate(R.layout.payment_dialog_register_aouth_key, container, false);
+        init();
+        refreshViews();
+        return pView;
     }
 
-    private void init(){
 
-        if(Payment.isFullScreen){
-            setCanceledOnTouchOutside(false);
-
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        }
-
-        setContentView(R.layout.payment_dialog_register_aouth_key);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        textKeyChangeNumber = findViewById(R.id.dialog_register_changeNumber);
-        textKeyTitle = findViewById(R.id.dialog_register_desc);
-        textKeyHint = findViewById(R.id.dialog_register_hint);
-        textKeyKey = findViewById(R.id.dialog_register_code);
-        btnKeySend = findViewById(R.id.dialog_register_btn_send);
-        btnKeyCancel = findViewById(R.id.dialog_register_btn_cancel);
-        textDescSendKey = findViewById(R.id.title_register);
+    private void init() {
+        textKeyChangeNumber = pView.findViewById(R.id.dialog_register_changeNumber);
+        textKeyTitle = pView.findViewById(R.id.dialog_register_desc);
+        textError = pView.findViewById(R.id.dialog_register_hint);
+        textKeyKey = pView.findViewById(R.id.dialog_register_code);
+        btnKeySend = pView.findViewById(R.id.dialog_register_btn_send);
+        btnKeyCancel = pView.findViewById(R.id.dialog_register_btn_cancel);
+        textDescSendKey = pView.findViewById(R.id.title_register);
 
         textKeyChangeNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +70,8 @@ public class DialogSendKey extends Dialog {
             @Override
             public void onClick(View view) {
                 if (textKeyKey.getText().toString().length() == 0) {
-                    showError("کد فعالسازی را وارد نمایید");
+                    setError("کد فعالسازی را وارد نمایید");
+                    applyError();
                 } else {
                     if (mListener != null) {
                         mListener.doSendKey(textKeyKey.getText().toString());
@@ -106,46 +84,100 @@ public class DialogSendKey extends Dialog {
         btnKeyCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancel();
                 if (mListener != null) {
                     mListener.cancelSendKey();
                 }
             }
         });
 
-        
+    }
 
-
+    public void refreshViews() {
+        applyMessage();
+        applyPhoneNumber();
+        applyError();
     }
 
 
-    public void setMessage(String message){
-        textDescSendKey.setText(message);
+    public void setListener(interactionSendKey mListener) {
+        this.mListener = mListener;
     }
 
-    public void showError(String message){
-        textKeyHint.setText(message);
-        textKeyHint.setVisibility(View.VISIBLE);
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void hideError(){
-        textKeyHint.setVisibility(View.GONE);
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public void setPhoneNumber(String phoneNumber){
-        textKeyTitle.setText(phoneNumber);
-    }
-
-    public void setKey(String key){
-        textKeyKey.setText(key);
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
 
+    public void applyError() {
+        if (textError == null) return;
+        if (error != null && !error.isEmpty()) {
+            textError.setText(error);
+            textError.setVisibility(View.VISIBLE);
+        } else {
+            textError.setVisibility(View.GONE);
+        }
+    }
 
+    public void applyPhoneNumber() {
+        if (textKeyTitle != null) {
+            textKeyTitle.setText(phoneNumber);
+        }
+    }
 
-    public interface interactionSendKey{
+    private void applyKey(String key) {
+        if (textKeyKey != null) {
+            textKeyKey.setText(key);
+        }
+    }
+
+    public void applyMessage() {
+        if (textDescSendKey != null) {
+            textDescSendKey.setText(message);
+        }
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        IntentFilter iff = new IntentFilter(BROADCAST_UPDATE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(onGotKey, iff);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(onGotKey);
+    }
+
+    private BroadcastReceiver onGotKey = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                applyKey(intent.getStringExtra("code"));
+                if (mListener != null) {
+                    mListener.doSendKey(intent.getStringExtra("code"));
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    };
+
+    public interface interactionSendKey {
         void changePhoneNumber();
+
         void doSendKey(String key);
+
         void cancelSendKey();
     }
 }

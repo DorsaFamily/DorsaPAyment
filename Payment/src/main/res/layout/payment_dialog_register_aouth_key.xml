@@ -1,123 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bgr_round_ff"
-    android:layoutDirection="ltr"
-    android:padding="16dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99000000"
+    android:layoutDirection="ltr">
 
-    <ir.dorsa.totalpayment.customView.CTextView
-        android:id="@+id/dialog_register_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="دوست خوبم به شماره همراه :"
-        android:textColor="#0e42a7"
-        android:textSize="14sp" />
+        android:layout_height="match_parent"
+        >
 
-    <ir.dorsa.totalpayment.customView.CTextView
-        android:id="@+id/dialog_register_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_register_title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dp"
-        android:text="09123456789"
-        android:textColor="@color/payment_color_3"
-        android:textSize="16sp"
-        />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bgr_round_ff"
+            android:padding="15dp">
 
+            <ir.dorsa.totalpayment.customView.CTextView
+                android:id="@+id/dialog_register_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:text="دوست خوبم به شماره همراه :"
+                android:textColor="#0e42a7"
+                android:textSize="14sp" />
 
-    <ir.dorsa.totalpayment.customView.CTextView
-        android:id="@+id/title_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_register_desc"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="7dp"
-        android:text="اگر سیمکارت شما برروی همین دستگاه باشد،شماره تلفن همراه به صورت خودکار تایید میشه. در غیر این صورت کد پیامک شده رو در کادر زیر وارد نمایید."
-        android:textColor="#0e42a7"
-        android:textSize="14sp" />
+            <ir.dorsa.totalpayment.customView.CTextView
+                android:id="@+id/dialog_register_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:text="09123456789"
+                android:textColor="@color/payment_color_3"
+                android:textSize="16sp" />
 
-    <ir.dorsa.totalpayment.customView.CTextView
-        android:id="@+id/dialog_register_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title_register"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:text="خطا در ارتباط با اینترنت"
-        android:textColor="#ff4a4a"
-        android:textSize="14sp"
-        android:visibility="gone" />
+            <ir.dorsa.totalpayment.customView.CTextView
+                android:id="@+id/title_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_desc"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:gravity="center"
+                android:maxWidth="350dp"
+                android:maxLines="3"
+                android:text="اگر سیمکارت شما برروی همین دستگاه باشد،شماره تلفن همراه به صورت خودکار تایید میشه. در غیر این صورت کد پیامک شده رو در کادر زیر وارد نمایید."
+                android:textColor="#0e42a7"
+                android:textSize="14sp" />
 
-    <ir.dorsa.totalpayment.customView.cEditText
-        android:id="@+id/dialog_register_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_register_hint"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="7dp"
-        android:hint="کد پیامک شده"
-        android:textSize="16sp"
-        android:inputType="number"
-        android:maxLength="10"
+            <ir.dorsa.totalpayment.customView.CTextView
+                android:id="@+id/dialog_register_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_register"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="خطا در ارتباط با اینترنت"
+                android:textColor="#ff4a4a"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
-        android:textColor="#FF3595CA"
-        android:textColorHint="@color/payment_color_0"
-        app:backgroundTint="#b9e5f1"
+            <ir.dorsa.totalpayment.customView.cEditText
+                android:id="@+id/dialog_register_code"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_hint"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:gravity="center"
+                android:hint="کد پیامک شده"
+                android:inputType="number"
+                android:maxLength="10"
+                android:padding="5dp"
+                android:textColor="#FF3595CA"
+                android:textColorHint="@color/payment_color_0"
+                android:textSize="16sp"
+                app:backgroundTint="#b9e5f1"
 
-        />
+                />
 
-    <ir.dorsa.totalpayment.customView.CTextView
-        android:id="@+id/dialog_register_changeNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_register_code"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dp"
-        android:text="تغییر شماره موبایل"
-        android:textColor="@color/payment_color_0"
-        android:textSize="14sp" />
+            <ir.dorsa.totalpayment.customView.CTextViewBold
+                android:id="@+id/dialog_register_changeNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_code"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:text="تغییر شماره موبایل"
+                android:textColor="@color/payment_color_0"
+                android:textSize="14sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_register_changeNumber"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_changeNumber"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-        <ir.dorsa.totalpayment.customView.cButton
-            android:id="@+id/dialog_register_btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:background="@drawable/btn_round_stroke"
-            android:stateListAnimator="@null"
-            android:text="انصراف"
-            android:textColor="@color/payment_color_1" />
+                <ir.dorsa.totalpayment.customView.cButton
+                    android:id="@+id/dialog_register_btn_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_round_stroke"
+                    android:stateListAnimator="@null"
+                    android:text="انصراف"
+                    android:textColor="@color/payment_color_1"
+                    android:textSize="12sp" />
 
-        <ir.dorsa.totalpayment.customView.cButton
-            android:id="@+id/dialog_register_btn_send"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:background="@drawable/btn_round_solid"
-            android:stateListAnimator="@null"
-            android:text="تایید"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
+                <ir.dorsa.totalpayment.customView.cButton
+                    android:id="@+id/dialog_register_btn_send"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_round_solid"
+                    android:stateListAnimator="@null"
+                    android:text="تایید"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

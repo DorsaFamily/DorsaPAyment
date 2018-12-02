@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "12345";
-    private String productCode = "12345";
-    private String irancellSku = "12345";
+    private String appCode = "1557";
+    private String productCode = "boom970619";
+    private String irancellSku = "boomboomdorsa";
     private String MarketingId = "12345";
 
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {//غیر فعال می باشد
                             Intent intentDorsaPayment = payment.getPaymentIntent(
-                                    true,
+                                    false,
                                     true,
                                     "متن ارسال شماره موبایل",
                                     appCode,

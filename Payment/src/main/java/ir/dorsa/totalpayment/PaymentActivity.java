@@ -238,6 +238,14 @@ public class PaymentActivity extends AppCompatActivity implements
         return statusBarHeight != 0;
     }
 
+    public boolean isNavigationBarVisible() {
+        Rect rectangle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.right;
+        return statusBarHeight != 0;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -247,11 +255,11 @@ public class PaymentActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-
         if (getIntent().getBooleanExtra(Payment.KEY_IS_FULLSCREEN, false)) {
             createHelperWnd();
         }
     }
+
+
 
 }

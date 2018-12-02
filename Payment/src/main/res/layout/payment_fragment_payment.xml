@@ -11,4 +11,8 @@
         android:scaleType="centerCrop"
         android:visibility="gone"
         />
+    <FrameLayout
+        android:id="@+id/frame_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
 </RelativeLayout>
