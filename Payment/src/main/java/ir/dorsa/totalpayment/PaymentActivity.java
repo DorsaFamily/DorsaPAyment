@@ -8,7 +8,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -19,14 +18,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import net.jhoobin.jhub.CharkhoneSdkApp;
-
 import ir.dorsa.totalpayment.intro.FragmentIntro;
 import ir.dorsa.totalpayment.payment.FragmentCheckStatus;
 import ir.dorsa.totalpayment.payment.FragmentPayment;
 import ir.dorsa.totalpayment.payment.Payment;
 import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
-import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
@@ -76,11 +72,11 @@ public class PaymentActivity extends AppCompatActivity implements
         new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
 
 
-        try {
+       /* try {
             CharkhoneSdkApp.initSdk(getApplicationContext(), Utils.getSecrets(this));
         } catch (Exception ex) {
 
-        }
+        }*/
 
         try {
 
@@ -104,7 +100,7 @@ public class PaymentActivity extends AppCompatActivity implements
             } else {
 
                 new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
-                getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame_fragment,
                                 new FragmentCheckStatus().newInstance(
                                         paymentProductCode,
@@ -157,7 +153,7 @@ public class PaymentActivity extends AppCompatActivity implements
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commit();
         } else {
             new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
-            getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.frame_fragment,
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment,
                     new FragmentPayment().newInstance(
                             textSendPhoneNumber,
                             paymentProductCode,
