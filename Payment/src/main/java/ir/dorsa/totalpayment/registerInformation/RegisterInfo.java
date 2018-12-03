@@ -151,6 +151,9 @@ public class RegisterInfo {
 
         params.setDeviceName(Build.MANUFACTURER);
         params.setDeviceModel(Build.MODEL);
+        params.setVersion(BuildConfig.VERSION_NAME);
+        params.setOsVersion(""+android.os.Build.VERSION.SDK_INT);
+
         params.setUniqueCode(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
         params.setNumber((phoneNumber==null?"":phoneNumber));
 

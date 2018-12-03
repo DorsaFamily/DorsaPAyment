@@ -79,6 +79,7 @@ public class DialogMessage extends Dialog {
         getWindow().setDimAmount(0.0f);
 
         textMessage=findViewById(R.id.textView24);
+
         btnOk=findViewById(R.id.button3);
         btnCancel=findViewById(R.id.button4);
         btnOthers=findViewById(R.id.button5);

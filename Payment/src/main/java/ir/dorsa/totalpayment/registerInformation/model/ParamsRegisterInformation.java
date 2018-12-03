@@ -30,6 +30,12 @@ public class ParamsRegisterInformation {
     @SerializedName("Operator")
     @Expose
     private String operator;
+    @SerializedName("Version")
+    @Expose
+    private String version;
+    @SerializedName("OSVersion")
+    @Expose
+    private String osVersion;
 
     public String getDeviceName() {
         return deviceName;
@@ -93,5 +99,21 @@ public class ParamsRegisterInformation {
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getOsVersion() {
+        return osVersion;
+    }
+
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
     }
 }
