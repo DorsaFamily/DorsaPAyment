@@ -147,11 +147,10 @@ public class RegisterInfo {
 
         params.setAppName(appName);
         params.setPkgName(pkgName);
-        params.setVarsion(versionName);
+        params.setVersion(versionName);
 
         params.setDeviceName(Build.MANUFACTURER);
         params.setDeviceModel(Build.MODEL);
-        params.setVersion(BuildConfig.VERSION_NAME);
         params.setOsVersion(""+android.os.Build.VERSION.SDK_INT);
 
         params.setUniqueCode(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));

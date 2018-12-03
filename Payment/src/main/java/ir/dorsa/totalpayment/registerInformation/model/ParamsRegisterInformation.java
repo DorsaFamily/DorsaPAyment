@@ -18,9 +18,6 @@ public class ParamsRegisterInformation {
     @SerializedName("PkgName")
     @Expose
     private String pkgName;
-    @SerializedName("Varsion")
-    @Expose
-    private String varsion;
     @SerializedName("UniqueCode")
     @Expose
     private String uniqueCode;
@@ -67,14 +64,6 @@ public class ParamsRegisterInformation {
 
     public void setPkgName(String pkgName) {
         this.pkgName = pkgName;
-    }
-
-    public String getVarsion() {
-        return varsion;
-    }
-
-    public void setVarsion(String varsion) {
-        this.varsion = varsion;
     }
 
     public String getUniqueCode() {
