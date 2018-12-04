@@ -46,25 +46,32 @@ public class MainActivity extends AppCompatActivity {
                 irancellSku,
                 new Payment.onCheckFinished() {
                     @Override
-                    public void result(boolean status, String message) {//true فعال می باشد
+                    public void result(boolean status, int errorCode, String message) {//true فعال می باشد
+
                         if (status) {//فعال می باشد
-                                //نمایش یا عدم نمایش دکمه لغو ایرانسل
+                            //نمایش یا عدم نمایش دکمه لغو ایرانسل
                             if (payment.showCancelSubscribtion()) {
                                 btnCancelIrancel.setVisibility(View.VISIBLE);
                             } else {
                                 btnCancelIrancel.setVisibility(View.GONE);
                             }
                         } else {//غیر فعال می باشد
-                            Intent intentDorsaPayment = payment.getPaymentIntent(
-                                    false,
-                                    true,
-                                    "متن ارسال شماره موبایل",
-                                    appCode,
-                                    productCode,
-                                    irancellSku,
-                                    new int[]{R.layout.intri_0, R.layout.intri_1, R.layout.intri_2, R.layout.intri_3}
-                            );
-                            startActivityForResult(intentDorsaPayment, REQUEST_CODE_REGISTER);
+//                        if(errorCode==Payment.ERROR_CODE_USER_NOT_REGISTERED)  // کاربر ثبت نام ننموده است
+//                        if(errorCode == Payment.ERROR_CODE_USER_HAS_NO_CHARGE)   // شماره کاربر دارای شارژ نمی باشد
+//                        if(errorCode==Payment.ERROR_CODE_INTERNET_CONNECTION)  // کاربر در اتصال به اینترنت مشکل دارد
+//
+                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
+                                Intent intentDorsaPayment = payment.getPaymentIntent(
+                                        false,
+                                        false,
+                                        "متن ارسال شماره موبایل",
+                                        appCode,
+                                        productCode,
+                                        irancellSku,
+                                        new int[]{R.layout.intri_0, R.layout.intri_1, R.layout.intri_2, R.layout.intri_3}
+                                );
+                                startActivityForResult(intentDorsaPayment, REQUEST_CODE_REGISTER);
+                            }
                         }
                     }
                 });

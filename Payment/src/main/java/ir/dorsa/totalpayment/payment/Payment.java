@@ -28,6 +28,10 @@ public class Payment {
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
 
+    public static final int ERROR_CODE_USER_NOT_REGISTERED=IMPayment.STATUS_USER_NOT_REGISTER_YET;
+    public static final int ERROR_CODE_INTERNET_CONNECTION=IMPayment.STATUS_INTERNRT_CONNECTION;
+    public static final int ERROR_CODE_USER_HAS_NO_CHARGE=IMPayment.STATUS_NO_CHARGE;
+
     public static boolean isFullScreen = false;
 
     private Context context;
@@ -205,7 +209,7 @@ public class Payment {
      * اینترفیس بررسی وضعیت اشتراک
      */
     public interface onCheckFinished {
-        void result(boolean status, String message);
+        void result(boolean status,int errorCode, String message);
     }
 
 
@@ -317,14 +321,14 @@ public class Payment {
         @Override
         public void onFailedCheckStatus(int errorCode, String errorMessage) {
             if (onCheckFinished != null) {
-                onCheckFinished.result(false, errorMessage);
+                onCheckFinished.result(false,errorCode, errorMessage);
             }
         }
 
         @Override
         public void onSuccessCheckStatus() {
             if (onCheckFinished != null) {
-                onCheckFinished.result(true, "شارژینگ شما فعال است");
+                onCheckFinished.result(true,0, "شارژینگ شما فعال است");
             }
         }
     };

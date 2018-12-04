@@ -144,7 +144,7 @@ public class PPayment implements IPPayment {
     protected void checkStatus() {
 
         if (mBuy.getPhoneNumber().isEmpty()) {
-            onFailedCheckStatus(1, "empty phone number");
+            onFailedCheckStatus(IMPayment.STATUS_USER_NOT_REGISTER_YET, "empty phone number");
             return;
         }
         ivBuy.onStartCheckStatus();

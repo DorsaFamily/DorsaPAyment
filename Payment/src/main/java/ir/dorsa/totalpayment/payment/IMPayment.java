@@ -17,6 +17,7 @@ public interface IMPayment {
     String SH_P_BUY_IN_APP_HAS_KEY="SH_P_BUY_IN_APP_HAS_KEY";
     String BR_CAST_GOT_NUMBER="broadcast_get_key";
 
+    int STATUS_USER_NOT_REGISTER_YET=9;
     int STATUS_NO_CHARGE=10;
     int STATUS_INTERNRT_CONNECTION=11;
 
