@@ -60,18 +60,18 @@ public class MainActivity extends AppCompatActivity {
 //                        if(errorCode == Payment.ERROR_CODE_USER_HAS_NO_CHARGE)   // شماره کاربر دارای شارژ نمی باشد
 //                        if(errorCode==Payment.ERROR_CODE_INTERNET_CONNECTION)  // کاربر در اتصال به اینترنت مشکل دارد
 //
-                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
+//                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
                                 Intent intentDorsaPayment = payment.getPaymentIntent(
-                                        false,
-                                        false,
-                                        "متن ارسال شماره موبایل",
+                                        true,
+                                        true,
+                                        "برای فعالسازی شماره همراه خود را وارد نمایید",
                                         appCode,
                                         productCode,
                                         irancellSku,
                                         new int[]{R.layout.intri_0, R.layout.intri_1, R.layout.intri_2, R.layout.intri_3}
                                 );
                                 startActivityForResult(intentDorsaPayment, REQUEST_CODE_REGISTER);
-                            }
+//                            }
                         }
                     }
                 });

@@ -3,7 +3,6 @@ package ir.dorsa.totalpayment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Build;
@@ -55,11 +54,11 @@ public class PaymentActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_activity_payment);
 
-        if (getIntent().getBooleanExtra(Payment.KEY_IS_LANDSCAP, false)) {
+        /*if (getIntent().getBooleanExtra(Payment.KEY_IS_LANDSCAP, false)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
 
 
         if (getIntent().getBooleanExtra(Payment.KEY_IS_FULLSCREEN, false)) {

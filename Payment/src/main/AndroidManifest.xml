@@ -17,6 +17,13 @@
             >
         </activity>
 
+        <activity android:name=".PaymentActivityLandScape"
+            android:theme="@style/PaymentTranslucentTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            >
+        </activity>
+
 
 
         <receiver android:name=".service.SmsListener">

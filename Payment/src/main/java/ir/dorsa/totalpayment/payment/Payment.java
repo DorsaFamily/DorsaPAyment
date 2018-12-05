@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
+import ir.dorsa.totalpayment.PaymentActivityLandScape;
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
 import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.Func;
@@ -127,7 +128,13 @@ public class Payment {
     ) {
         this.isFullScreen = isFullScreen;
 
-        Intent intent = new Intent(context, PaymentActivity.class);
+        Intent intent;
+        if(isLandscape){
+            intent=new Intent(context, PaymentActivityLandScape.class);
+        }else{
+        intent=new Intent(context, PaymentActivity.class);
+
+        }
 
         intent.putExtra(KEY_IS_LANDSCAP, isLandscape);
         intent.putExtra(KEY_IS_FULLSCREEN, isFullScreen);
