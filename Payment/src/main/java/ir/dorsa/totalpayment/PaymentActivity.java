@@ -3,8 +3,11 @@ package ir.dorsa.totalpayment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -17,11 +20,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import net.jhoobin.jhub.CharkhoneSdkApp;
+
 import ir.dorsa.totalpayment.intro.FragmentIntro;
 import ir.dorsa.totalpayment.payment.FragmentCheckStatus;
 import ir.dorsa.totalpayment.payment.FragmentPayment;
 import ir.dorsa.totalpayment.payment.Payment;
 import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
+import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
@@ -48,17 +54,11 @@ public class PaymentActivity extends AppCompatActivity implements
     private int[] splashLayoutResource;
     private String marketId;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_activity_payment);
-
-        /*if (getIntent().getBooleanExtra(Payment.KEY_IS_LANDSCAP, false)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }*/
 
 
         if (getIntent().getBooleanExtra(Payment.KEY_IS_FULLSCREEN, false)) {
@@ -67,15 +67,16 @@ public class PaymentActivity extends AppCompatActivity implements
             createHelperWnd();
         }
 
-
         new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
 
+        setContentView(R.layout.payment_activity_payment);
 
-       /* try {
+
+        try {
             CharkhoneSdkApp.initSdk(getApplicationContext(), Utils.getSecrets(this));
         } catch (Exception ex) {
 
-        }*/
+        }
 
         try {
 
@@ -117,6 +118,11 @@ public class PaymentActivity extends AppCompatActivity implements
             finish();
         }
     }
+
+
+
+
+
 
     @Override
     public void onSuccessSubscribe() {

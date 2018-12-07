@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
                                 Intent intentDorsaPayment = payment.getPaymentIntent(
-                                        true,
-                                        true,
+                                        false,
                                         "برای فعالسازی شماره همراه خود را وارد نمایید",
                                         appCode,
                                         productCode,

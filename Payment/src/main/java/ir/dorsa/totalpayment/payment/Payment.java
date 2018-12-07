@@ -20,7 +20,6 @@ import static ir.dorsa.totalpayment.payment.IMPayment.SH_P_BUY_IN_APP_PHONE_NUMB
 
 public class Payment {
     public static final String KEY_TEXT_SEND_PHONE_NUMBER = "KEY_TEXT_SEND_PHONE_NUMBER";
-    public static final String KEY_IS_LANDSCAP = "KEY_IS_LANDSCAP";
     public static final String KEY_IS_FULLSCREEN = "KEY_IS_FULLSCREEN";
     public static final String KEY_APP_CODE = "KEY_APP_CODE";
     public static final String KEY_PRODUCT_CODE = "KEY_PRODUCT_CODE";
@@ -76,39 +75,10 @@ public class Payment {
                 splashLayoutResource);
     }
 
-    /**
-     * متد دریافت intent فراخوانی پرداخت
-     *
-     * @param isLandscape          آیا برنامه به صورت افقی اجرا می شود
-     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
-     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
-     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
-     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
-     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
-     */
-    public Intent getPaymentIntent(
-            boolean isLandscape,
-            String textSendPhoneNumber,
-            String appCode,
-            String productCode,
-            String irancellSku,
-            int[] splashLayoutResource
-
-    ) {
-        return getPaymentIntent(
-                isLandscape,
-                false,
-                textSendPhoneNumber,
-                appCode,
-                productCode,
-                irancellSku,
-                splashLayoutResource);
-    }
 
     /**
      * متد دریافت intent فراخوانی پرداخت
      *
-     * @param isLandscape          آیا برنامه به صورت افقی اجرا می شود
      * @param isFullScreen         آیا برنامه تمام صفحه ایجاد شود
      * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
      * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
@@ -117,7 +87,6 @@ public class Payment {
      * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
     public Intent getPaymentIntent(
-            boolean isLandscape,
             boolean isFullScreen,
             String textSendPhoneNumber,
             String appCode,
@@ -129,14 +98,8 @@ public class Payment {
         this.isFullScreen = isFullScreen;
 
         Intent intent;
-        if(isLandscape){
-            intent=new Intent(context, PaymentActivityLandScape.class);
-        }else{
         intent=new Intent(context, PaymentActivity.class);
 
-        }
-
-        intent.putExtra(KEY_IS_LANDSCAP, isLandscape);
         intent.putExtra(KEY_IS_FULLSCREEN, isFullScreen);
         intent.putExtra(KEY_TEXT_SEND_PHONE_NUMBER, textSendPhoneNumber);
         intent.putExtra(KEY_APP_CODE, appCode);
