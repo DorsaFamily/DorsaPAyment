@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/bgr_round_ff"
+            android:layout_margin="15dp"
             android:padding="15dp">
 
             <ir.dorsa.totalpayment.customView.CTextView

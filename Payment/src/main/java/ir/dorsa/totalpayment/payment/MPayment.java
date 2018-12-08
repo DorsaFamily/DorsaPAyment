@@ -231,7 +231,7 @@ public class MPayment implements IMPayment {
                         } else if ("SVC0001".equals(joError.getString("status"))) {
                             ipBuy.onFailedSendPhoneNumber("خطا؛ لطفا 5 دقیقه دیگر امتحان نمایید.");
                         } else {
-                            ipBuy.onFailedSendPhoneNumber("خطا در سرور مجددا امتحان نمایید");
+                            ipBuy.onFailedSendPhoneNumber(joError.getString("message"));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
