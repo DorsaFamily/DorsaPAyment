@@ -11,7 +11,7 @@
     <style name="PaymentTranslucentTheme" parent="PaymentTheme">
 
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
 
 
         <item name="android:windowNoTitle">true</item>

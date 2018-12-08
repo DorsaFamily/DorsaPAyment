@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "1557";
-    private String productCode = "boom970619";
-    private String irancellSku = "boomboomdorsa";
+    private String appCode = "12345";
+    private String productCode = "12345";
+    private String irancellSku = "12345";
     private String MarketingId = "12345";
 
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
                                 Intent intentDorsaPayment = payment.getPaymentIntent(
-                                        false,
+                                        true,
                                         "برای فعالسازی شماره همراه خود را وارد نمایید",
                                         appCode,
                                         productCode,
