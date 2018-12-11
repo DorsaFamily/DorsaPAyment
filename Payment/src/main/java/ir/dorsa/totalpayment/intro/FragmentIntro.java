@@ -26,6 +26,8 @@ public class FragmentIntro extends Fragment {
     private RelativeLayout relEnter;
     private ViewPagerIndicator viewPagerIndicator;
 
+    private View back;
+
     private int layoutId[]=new int[4];
     private interaction mListener;
 
@@ -53,6 +55,17 @@ public class FragmentIntro extends Fragment {
         viewPager =pView.findViewById(R.id.view_pager);
         relEnter=pView.findViewById(R.id.enter);
         viewPagerIndicator=pView.findViewById(R.id.view_pager_indicator);
+        back=pView.findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onBackPressed();
+                }
+            }
+        });
+
         setupViewPager();
 
         viewPagerIndicator.setupWithViewPager(viewPager);
@@ -182,5 +195,6 @@ public class FragmentIntro extends Fragment {
 
     public interface interaction{
         void onEnterSelected();
+        void onBackPressed();
     }
 }
