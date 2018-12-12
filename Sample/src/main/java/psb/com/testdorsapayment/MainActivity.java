@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_REGISTER = 123;
 
-    private String appCode = "12345";
-    private String productCode = "12345";
-    private String irancellSku = "12345";
+    public static final String appCode="1468";
+    public static final String productCode="1468200";
+    public static final String irancellSku="fandoghdorsa";
     private String MarketingId = "12345";
 
 

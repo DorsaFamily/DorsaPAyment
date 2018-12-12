@@ -57,14 +57,17 @@ public class FragmentIntro extends Fragment {
         viewPagerIndicator=pView.findViewById(R.id.view_pager_indicator);
         back=pView.findViewById(R.id.back);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onBackPressed();
+        if (back != null) {
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onBackPressed();
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
         setupViewPager();
 
