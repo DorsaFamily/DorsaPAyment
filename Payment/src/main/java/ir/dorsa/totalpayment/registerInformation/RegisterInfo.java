@@ -1,10 +1,13 @@
 package ir.dorsa.totalpayment.registerInformation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+
+import com.google.gson.Gson;
 
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +62,9 @@ public class RegisterInfo {
     public void install() {
         if (!Utils.getBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_INSTALL_KEY)) {
 
+            String sendDetailsIs="Install\n"+new Gson().toJson(getParamsInformation(null));
+            shareText(sendDetailsIs);
+
             ApiRequestInstall service = getRetrofit().create(ApiRequestInstall.class);
             Call<ResponseBody> call = service.installApp(getParamsInformation(null));
             call.enqueue(new Callback<ResponseBody>() {
@@ -79,6 +85,8 @@ public class RegisterInfo {
 
     public void active(String phoneNumber) {
         if (!Utils.getBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_ACTIVE_KEY)) {
+            String sendDetailsIs="Active\n"+new Gson().toJson(getParamsInformation(phoneNumber));
+            shareText(sendDetailsIs);
             ApiRequestActive service = getRetrofit().create(ApiRequestActive.class);
             Call<ResponseBody> call = service.activeApp(getParamsInformation(phoneNumber));
             call.enqueue(new Callback<ResponseBody>() {
@@ -97,13 +105,17 @@ public class RegisterInfo {
         }
     }
 
-    public void deactive(String phoneNumber) {
+    public void deactive(final String phoneNumber) {
 
         ApiRequestDeactive service = getRetrofit().create(ApiRequestDeactive.class);
             Call<ResponseBody> call = service.deactiveApp(getParamsInformation(phoneNumber));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    String sendDetailsIs="Deactive\n"+new Gson().toJson(getParamsInformation(phoneNumber));
+                    shareText(sendDetailsIs);
+
                     Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_INSTALL_KEY, false);
                     Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_ACTIVE_KEY, false);
                     Utils.setBooleanPreference(context, Utils.REGISTER_INFO, Utils.REGISTER_INFO_DEACTIVE_KEY, false);
@@ -120,6 +132,13 @@ public class RegisterInfo {
 
     }
 
+    private void shareText(String message){
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+        context.startActivity(Intent.createChooser(sharingIntent, "اشتراک با"));
+    }
 
     private ParamsRegisterInformation getParamsInformation(String phoneNumber) {
 
