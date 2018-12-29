@@ -118,7 +118,7 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
             dialog.setClickListenerNegative(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
-                    pPayment.clearUserInfo();
+                    pPayment.clearUserInfo(false);
                     if (onCheckStatus != null) {
                         onCheckStatus.startPaymentFlow(false);
                     }

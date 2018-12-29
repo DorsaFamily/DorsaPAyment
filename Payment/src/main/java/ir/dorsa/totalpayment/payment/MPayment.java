@@ -165,7 +165,11 @@ public class MPayment implements IMPayment {
     }
 
     public void clearUserInfo() {
-        new RegisterInfo(getContext()).deactive(getPhoneNumber());
+        clearUserInfo(true);
+    }
+
+    public void clearUserInfo(boolean deActiveUser) {
+        if(deActiveUser)new RegisterInfo(getContext()).deactive(getPhoneNumber());
 
         SharedPreferences sharedPrefrece = getContext().getSharedPreferences(SH_P_BUY_IN_APP, getContext().MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
@@ -423,22 +427,22 @@ public class MPayment implements IMPayment {
                                 "active".equals(response.body().getData().get(0).getAutoCharge().toLowerCase())){
                             ipBuy.onFailedCheckStatus(STATUS_NO_CHARGE, "شارژ ناکافی");
                         }else {
-                            clearUserInfo();
+                            clearUserInfo(false);
                             ipBuy.onFailedCheckStatus(1, response.body().getMessage());
                         }
 
                     } else {
-                        clearUserInfo();
+                        clearUserInfo(false);
                         ipBuy.onFailedCheckStatus(2, response.body().getMessage());
                     }
                 } else {
                     try {
                         JSONObject joError = new JSONObject(response.errorBody().string());
-                        clearUserInfo();
+                        clearUserInfo(false);
                         ipBuy.onFailedCheckStatus(3, joError.getString("message"));
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
-                        clearUserInfo();
+                        clearUserInfo(false);
                         ipBuy.onFailedCheckStatus(4, "خطا در سرور مجددا امتحان نمایید");
                     }
 //                    ipBuy.onFailedSubscribe(response.body().getStatus());

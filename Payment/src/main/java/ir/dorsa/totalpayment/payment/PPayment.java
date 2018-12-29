@@ -218,7 +218,7 @@ public class PPayment implements IPPayment {
                 public void onIabSetupFinished(IabResult result) {
                     if (!result.isSuccess()) {
                         // Oh noes, there was a problem.
-                        mBuy.clearUserInfo();
+                        mBuy.clearUserInfo(false);
                         ivBuy.onFailedCheckStatus(1, "اشکال در بررسی شارژینگ");
                         return;
                     }
@@ -259,7 +259,7 @@ public class PPayment implements IPPayment {
                     if (mIsPremium) {
                         ivBuy.onSuccessCheckStatus();
                     } else {
-                        mBuy.clearUserInfo();
+                        mBuy.clearUserInfo(false);
                         ivBuy.onFailedCheckStatus(1, "اشکال در ارسال شماره موبایل");
                     }
                 }
@@ -350,7 +350,11 @@ public class PPayment implements IPPayment {
     }
 
     public void clearUserInfo() {
-        mBuy.clearUserInfo();
+        clearUserInfo(false);
+    }
+
+    public void clearUserInfo(boolean deactiveUser) {
+        mBuy.clearUserInfo(deactiveUser);
     }
 
     public void setHasKey(boolean hasKey) {

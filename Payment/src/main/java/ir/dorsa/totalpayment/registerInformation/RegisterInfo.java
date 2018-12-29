@@ -1,7 +1,6 @@
 package ir.dorsa.totalpayment.registerInformation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -133,11 +132,12 @@ public class RegisterInfo {
     }
 
     private void shareText(String message){
+        /*
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        context.startActivity(Intent.createChooser(sharingIntent, "اشتراک با"));
+        context.startActivity(Intent.createChooser(sharingIntent, "اشتراک با"));*/
     }
 
     private ParamsRegisterInformation getParamsInformation(String phoneNumber) {
