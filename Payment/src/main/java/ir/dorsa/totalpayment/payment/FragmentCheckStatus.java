@@ -128,23 +128,14 @@ public class FragmentCheckStatus extends Fragment implements IVPayment {
             dialog.setClickListenerOthers(new DialogMessage.ClickListener() {
                 @Override
                 public void onClick() {
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_CALL);
 
+                        Intent intent = new Intent(Intent.ACTION_CALL);
                         intent.setData(Uri.parse(chargeNumber));
                         startActivity(intent);
 
                         if (onCheckStatus != null) {
                             onCheckStatus.onExit("کمبود اعتبار");
                         }
-                    }
-
-
-
-
-
 
                 }
             });

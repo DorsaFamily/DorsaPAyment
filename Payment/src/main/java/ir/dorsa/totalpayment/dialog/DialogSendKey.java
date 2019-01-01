@@ -1,12 +1,8 @@
 package ir.dorsa.totalpayment.dialog;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
-
-import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
 
 public class DialogSendKey extends Fragment {
@@ -148,30 +142,12 @@ public class DialogSendKey extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        IntentFilter iff = new IntentFilter(BROADCAST_UPDATE);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(onGotKey, iff);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(onGotKey);
     }
-
-    private BroadcastReceiver onGotKey = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                applyKey(intent.getStringExtra("code"));
-                if (mListener != null) {
-                    mListener.doSendKey(intent.getStringExtra("code"));
-
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    };
 
     public interface interactionSendKey {
         void changePhoneNumber();
