@@ -23,6 +23,7 @@ import ir.dorsa.totalpayment.tools.Utils;
 
 import static android.app.Activity.RESULT_OK;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_DAILY_PRICE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_SKU;
@@ -36,6 +37,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
     private String sku;
     private String appCode;
     private String marketId;
+    private String dailyPrice;
 
     private static final String KEY_MESSAGE_SEND_PHONE_NUMBER = "KEY_MESSAGE_SEND_PHONE_NUMBER";
 
@@ -54,6 +56,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
     }
 
     public static FragmentPayment newInstance(
+            String dailyPrice,
             String textSendPhoneNumber,
             String productCode,
             String appCode,
@@ -67,11 +70,13 @@ public class FragmentPayment extends Fragment implements IVPayment {
         args.putString(KEY_PRODUCT_CODE, productCode);
         args.putString(KEY_SKU, sku);
         args.putString(KEY_APP_CODE, appCode);
+        args.putString(KEY_DAILY_PRICE, dailyPrice);
         fragment.setArguments(args);
         return fragment;
     }
 
     public static FragmentPayment newInstance(
+            String dailyPrice,
             String textSendPhoneNumber,
             String productCode,
             String appCode,
@@ -87,6 +92,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
         args.putString(KEY_SKU, sku);
         args.putString(KEY_APP_CODE, appCode);
         args.putString(KEY_MARKET_ID, marketId);
+        args.putString(KEY_DAILY_PRICE, dailyPrice);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,6 +109,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
 
             textSendPhonenumber=getArguments().getString(KEY_MESSAGE_SEND_PHONE_NUMBER);
 
+            dailyPrice=getArguments().getString(KEY_DAILY_PRICE);
         }
         pPayment = new PPayment(this, appCode, productCode,sku);
         if(marketId!=null){
@@ -178,6 +185,7 @@ public class FragmentPayment extends Fragment implements IVPayment {
             }
         });
         dialogSendKey.setMessage(getString(R.string.desc_send_code));
+        dialogSendKey.setDailyPrice(dailyPrice);
 
 
 

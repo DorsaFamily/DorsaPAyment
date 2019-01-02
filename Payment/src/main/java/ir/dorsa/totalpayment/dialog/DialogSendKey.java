@@ -1,8 +1,13 @@
 package ir.dorsa.totalpayment.dialog;
 
+import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
+
+import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
 
 public class DialogSendKey extends Fragment {
@@ -21,6 +28,7 @@ public class DialogSendKey extends Fragment {
     private TextView textError;
     private EditText textKeyKey;
     private TextView textDescSendKey;
+    private TextView textDailyPrice;
     private View btnKeySend;
     private View btnKeyCancel;
 
@@ -29,6 +37,7 @@ public class DialogSendKey extends Fragment {
     private String phoneNumber;
     private String message;
     private String error;
+    private String dailyPrice ="۳۰۰";
 
 
     private View pView;
@@ -47,6 +56,7 @@ public class DialogSendKey extends Fragment {
         textKeyTitle = pView.findViewById(R.id.dialog_register_desc);
         textError = pView.findViewById(R.id.dialog_register_hint);
         textKeyKey = pView.findViewById(R.id.dialog_register_code);
+        textDailyPrice = pView.findViewById(R.id.dialog_register_daily_price);
         btnKeySend = pView.findViewById(R.id.dialog_register_btn_send);
         btnKeyCancel = pView.findViewById(R.id.dialog_register_btn_cancel);
         textDescSendKey = pView.findViewById(R.id.title_register);
@@ -90,6 +100,7 @@ public class DialogSendKey extends Fragment {
         applyMessage();
         applyPhoneNumber();
         applyError();
+        applyDailyPrice();
     }
 
 
@@ -109,6 +120,20 @@ public class DialogSendKey extends Fragment {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setDailyPrice(String dailyPrice) {
+        dailyPrice = dailyPrice
+                .replace("0","۰")
+                .replace("1","۱")
+                .replace("2","۲")
+                .replace("3","۳")
+                .replace("4","۴")
+                .replace("5","۵")
+                .replace("6","۶")
+                .replace("7","۷")
+                .replace("8","۸")
+                .replace("9","۹");
+        this.dailyPrice = dailyPrice;
+    }
 
     public void applyError() {
         if (textError == null) return;
@@ -129,6 +154,7 @@ public class DialogSendKey extends Fragment {
     private void applyKey(String key) {
         if (textKeyKey != null) {
             textKeyKey.setText(key);
+            shakeView(btnKeySend);
         }
     }
 
@@ -139,14 +165,49 @@ public class DialogSendKey extends Fragment {
 
     }
 
+    public void applyDailyPrice(){
+        if (textDailyPrice != null) {
+            textDailyPrice.setText("هزینه روزانه "+ dailyPrice +" تومان");
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        IntentFilter iff = new IntentFilter(BROADCAST_UPDATE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(onGotKey, iff);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(onGotKey);
+    }
+
+    private BroadcastReceiver onGotKey = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                applyKey(intent.getStringExtra("code"));
+                /*if (mListener != null) {
+                    mListener.doSendKey(intent.getStringExtra("code"));
+
+                }*/
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    };
+
+    private void shakeView(View target){
+        android.animation.AnimatorSet animationSet=new android.animation.AnimatorSet();
+        animationSet.playTogether(
+                ObjectAnimator.ofFloat(target, "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
+
+        );
+        animationSet.setDuration(300);
+        animationSet.start();
     }
 
     public interface interactionSendKey {

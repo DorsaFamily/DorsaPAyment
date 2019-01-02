@@ -9,6 +9,6 @@
 
     <!--<string name="base64">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZDqoyQQqRhx6ziHo++fDnCdtHPP3lEC8/QfKrdATOIMvTCqKs3Xsdi/lVpf6RzeKhY+n7M6K8qe6vm8cjWC76iNA5lEQOKkgDYaNr/OMqB7UUC+oOFRLMWTnL5a94nSgMXORDlwCr0Jo7wDj10DyvCtcKW9dR6+JLg7tm6cs0YwIDAQAB</string>-->
     <string name="base64">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZDqoyQQqRhx6ziHo++fDnCdtHPP3lEC8/QfKrdATOIMvTCqKs3Xsdi/lVpf6RzeKhY+n7M6K8qe6vm8cjWC76iNA5lEQOKkgDYaNr/OMqB7UUC+oOFRLMWTnL5a94nSgMXORDlwCr0Jo7wDj10DyvCtcKW9dR6+JLg7tm6cs0YwIDAQAB</string>
-    <string name="desc_send_code">اگر سیمکارت شما برروی همین دستگاه باشد،شماره تلفن همراه به صورت خودکار تایید میشه. در غیر این صورت کد پیامک شده رو در کادر زیر وارد نمایید.</string>
+    <string name="desc_send_code">برای ادامه کد پیامک شده رو در کادر زیر وارد نمایید.</string>
     <string name="desc_send_has_key">"برای فعالسازی کد شش رقمی ارسال شده از طریق پیامک را وارد نمایید."</string>
 </resources>

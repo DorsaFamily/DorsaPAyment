@@ -27,6 +27,7 @@ import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_DAILY_PRICE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MESSAGE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
@@ -50,7 +51,7 @@ public class PaymentActivity extends AppCompatActivity implements
     private String paymentIrancellSku;
     private int[] splashLayoutResource;
     private String marketId;
-
+    private String dailyPrice;
 
 
     @Override
@@ -86,7 +87,14 @@ public class PaymentActivity extends AppCompatActivity implements
 
             marketId = getIntent().getExtras().getString(KEY_MARKET_ID);
 
-            if (textSendPhoneNumber == null || paymentAppCode == null || paymentProductCode == null) {
+            dailyPrice = getIntent().getExtras().getString(KEY_DAILY_PRICE);
+
+            if (
+                    textSendPhoneNumber == null ||
+                            paymentAppCode == null ||
+                            paymentProductCode == null ||
+                            dailyPrice == null
+                    ) {
                 onExit("مقادیر ناقص می باشد");
                 return;
             }
@@ -152,6 +160,7 @@ public class PaymentActivity extends AppCompatActivity implements
             new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment,
                     new FragmentPayment().newInstance(
+                            dailyPrice,
                             textSendPhoneNumber,
                             paymentProductCode,
                             paymentAppCode,
@@ -252,7 +261,6 @@ public class PaymentActivity extends AppCompatActivity implements
             createHelperWnd();
         }
     }
-
 
 
 }

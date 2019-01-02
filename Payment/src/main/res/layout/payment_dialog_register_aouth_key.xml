@@ -50,7 +50,7 @@
                 android:gravity="center"
                 android:maxWidth="350dp"
                 android:maxLines="3"
-                android:text="اگر سیمکارت شما برروی همین دستگاه باشد،شماره تلفن همراه به صورت خودکار تایید میشه. در غیر این صورت کد پیامک شده رو در کادر زیر وارد نمایید."
+                android:text="برای ادامه کد پیامک شده رو در کادر زیر وارد نمایید."
                 android:textColor="#0e42a7"
                 android:textSize="14sp" />
 
@@ -85,12 +85,21 @@
                 app:backgroundTint="#b9e5f1"
 
                 />
+            <ir.dorsa.totalpayment.customView.CTextView
+                android:id="@+id/dialog_register_daily_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_register_code"
+                android:layout_centerHorizontal="true"
+                android:text="هزینه روزانه"
+                android:textColor="@color/payment_color_0"
+                android:textSize="10sp" />
 
             <ir.dorsa.totalpayment.customView.CTextViewBold
                 android:id="@+id/dialog_register_changeNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/dialog_register_code"
+                android:layout_below="@+id/dialog_register_daily_price"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="7dp"
                 android:text="تغییر شماره موبایل"

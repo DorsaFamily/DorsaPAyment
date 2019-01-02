@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/bgr_round_ff"
+        android:layout_margin="15dp"
         android:padding="15dp">
 
         <ir.dorsa.totalpayment.customView.CTextView
@@ -22,7 +23,9 @@
             android:layout_centerHorizontal="true"
             android:text="شماره تلفن همراه خود را وارد نمایید"
             android:textColor="#0e42a7"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone"
+            />
 
         <ir.dorsa.totalpayment.customView.CTextView
             android:id="@+id/title_register"
@@ -65,6 +68,7 @@
             android:maxLength="11"
             android:padding="5dp"
             android:textColor="#FF3595CA"
+            android:gravity="center"
             android:textColorHint="#b9e5f1"
             android:textSize="16sp"
             app:backgroundTint="#b9e5f1" />

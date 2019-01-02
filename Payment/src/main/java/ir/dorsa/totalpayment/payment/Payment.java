@@ -3,12 +3,13 @@ package ir.dorsa.totalpayment.payment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.v4.app.Fragment;
 
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
-import ir.dorsa.totalpayment.PaymentActivityLandScape;
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
 import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.Func;
@@ -27,16 +28,18 @@ public class Payment {
     public static final String KEY_SKU = "KEY_SKU";
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
+    public static final String KEY_DAILY_PRICE = "KEY_DAILY_PRICE";
 
-    public static final int ERROR_CODE_USER_NOT_REGISTERED=IMPayment.STATUS_USER_NOT_REGISTER_YET;
-    public static final int ERROR_CODE_INTERNET_CONNECTION=IMPayment.STATUS_INTERNRT_CONNECTION;
-    public static final int ERROR_CODE_USER_HAS_NO_CHARGE=IMPayment.STATUS_NO_CHARGE;
+    public static final int ERROR_CODE_USER_NOT_REGISTERED = IMPayment.STATUS_USER_NOT_REGISTER_YET;
+    public static final int ERROR_CODE_INTERNET_CONNECTION = IMPayment.STATUS_INTERNRT_CONNECTION;
+    public static final int ERROR_CODE_USER_HAS_NO_CHARGE = IMPayment.STATUS_NO_CHARGE;
 
     public static boolean isFullScreen = false;
 
     private Context context;
 
     private String marketId;
+
 
     public Payment(Context context) {
         this.context = context;
@@ -51,14 +54,14 @@ public class Payment {
     /**
      * متد دریافت intent فراخوانی پرداخت
      *
-     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
+     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
      * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
      * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
      * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
      * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
     public Intent getPaymentIntent(
-            String textSendPhoneNumber,
+            int mciDailyPrice,
             String appCode,
             String productCode,
             String irancellSku,
@@ -66,7 +69,24 @@ public class Payment {
 
     ) {
 
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        String appName = applicationInfo.name;
+        String pkgName = context.getPackageName();
+
+        ApplicationInfo ai;
+        try {
+            ai = context.getPackageManager().getApplicationInfo(pkgName, 0);
+        } catch (final PackageManager.NameNotFoundException e) {
+            ai = null;
+        }
+        appName = (String) (ai != null ? context.getPackageManager().getApplicationLabel(ai) : "");
+
+        appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
+
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه " + mciDailyPrice + " تومان شماره تلفن همراه خود را وارد نمایید.";
+
         return getPaymentIntent(
+                mciDailyPrice,
                 false,
                 textSendPhoneNumber,
                 appCode,
@@ -79,6 +99,96 @@ public class Payment {
     /**
      * متد دریافت intent فراخوانی پرداخت
      *
+     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
+     * @param isFullScreen         آیا برنامه تمام صفحه ایجاد شود
+     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
+     */
+    public Intent getPaymentIntent(
+            int mciDailyPrice,
+            boolean isFullScreen,
+            String appCode,
+            String productCode,
+            String irancellSku,
+            int[] splashLayoutResource
+
+    ) {
+
+        String mciDailyPriceString = ""+mciDailyPrice;
+        mciDailyPriceString=mciDailyPriceString
+                .replace("0", "۰")
+                .replace("1", "۱")
+                .replace("2", "۲")
+                .replace("3", "۳")
+                .replace("4", "۴")
+                .replace("5", "۵")
+                .replace("6", "۶")
+                .replace("7", "۷")
+                .replace("8", "۸")
+                .replace("9", "۹");
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        String appName = applicationInfo.name;
+        String pkgName = context.getPackageName();
+
+        ApplicationInfo ai;
+        try {
+            ai = context.getPackageManager().getApplicationInfo(pkgName, 0);
+        } catch (final PackageManager.NameNotFoundException e) {
+            ai = null;
+        }
+        appName = (String) (ai != null ? context.getPackageManager().getApplicationLabel(ai) : "");
+
+        appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
+
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه " + mciDailyPrice + " تومان شماره تلفن همراه خود را وارد نمایید.";
+
+        return getPaymentIntent(
+                mciDailyPrice,
+                isFullScreen,
+                textSendPhoneNumber,
+                appCode,
+                productCode,
+                irancellSku,
+                splashLayoutResource);
+    }
+
+    /**
+     * متد دریافت intent فراخوانی پرداخت
+     *
+     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
+     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
+     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
+     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
+     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
+     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
+     */
+    public Intent getPaymentIntent(
+            int mciDailyPrice,
+            String textSendPhoneNumber,
+            String appCode,
+            String productCode,
+            String irancellSku,
+            int[] splashLayoutResource
+
+    ) {
+
+        return getPaymentIntent(
+                mciDailyPrice,
+                false,
+                textSendPhoneNumber,
+                appCode,
+                productCode,
+                irancellSku,
+                splashLayoutResource);
+    }
+
+
+    /**
+     * متد دریافت intent فراخوانی پرداخت
+     *
+     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
      * @param isFullScreen         آیا برنامه تمام صفحه ایجاد شود
      * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
      * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
@@ -87,6 +197,7 @@ public class Payment {
      * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
     public Intent getPaymentIntent(
+            int mciDailyPrice,
             boolean isFullScreen,
             String textSendPhoneNumber,
             String appCode,
@@ -98,7 +209,20 @@ public class Payment {
         this.isFullScreen = isFullScreen;
 
         Intent intent;
-        intent=new Intent(context, PaymentActivity.class);
+        intent = new Intent(context, PaymentActivity.class);
+
+        String mciDailyPriceString = ""+mciDailyPrice;
+        mciDailyPriceString=mciDailyPriceString
+                .replace("0", "۰")
+                .replace("1", "۱")
+                .replace("2", "۲")
+                .replace("3", "۳")
+                .replace("4", "۴")
+                .replace("5", "۵")
+                .replace("6", "۶")
+                .replace("7", "۷")
+                .replace("8", "۸")
+                .replace("9", "۹");
 
         intent.putExtra(KEY_IS_FULLSCREEN, isFullScreen);
         intent.putExtra(KEY_TEXT_SEND_PHONE_NUMBER, textSendPhoneNumber);
@@ -106,6 +230,7 @@ public class Payment {
         intent.putExtra(KEY_PRODUCT_CODE, productCode);
         intent.putExtra(KEY_SKU, irancellSku);
         intent.putExtra(KEY_SPLASH, splashLayoutResource);
+        intent.putExtra(KEY_DAILY_PRICE, mciDailyPriceString);
 
         if (getMarketId() != null) {
             intent.putExtra(KEY_MARKET_ID, getMarketId());
@@ -179,7 +304,7 @@ public class Payment {
      * اینترفیس بررسی وضعیت اشتراک
      */
     public interface onCheckFinished {
-        void result(boolean status,int errorCode, String message);
+        void result(boolean status, int errorCode, String message);
     }
 
 
@@ -208,12 +333,12 @@ public class Payment {
         return sharedPrefrece.getString(SH_P_BUY_IN_APP_PHONE_NUMBER, "");
     }
 
-    public String getReferenceCode(){
+    public String getReferenceCode() {
         PPayment pPayment = new PPayment(ivPayment, "", "", "");
         return pPayment.getReferenceCode();
     }
 
-    public String getIrancelToken(){
+    public String getIrancelToken() {
         PPayment pPayment = new PPayment(ivPayment, "", "", "");
         return pPayment.getIrancellToken();
     }
@@ -291,14 +416,14 @@ public class Payment {
         @Override
         public void onFailedCheckStatus(int errorCode, String errorMessage) {
             if (onCheckFinished != null) {
-                onCheckFinished.result(false,errorCode, errorMessage);
+                onCheckFinished.result(false, errorCode, errorMessage);
             }
         }
 
         @Override
         public void onSuccessCheckStatus() {
             if (onCheckFinished != null) {
-                onCheckFinished.result(true,0, "شارژینگ شما فعال است");
+                onCheckFinished.result(true, 0, "شارژینگ شما فعال است");
             }
         }
     };
