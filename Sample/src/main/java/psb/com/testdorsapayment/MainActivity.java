@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
 //
 //                            if (errorCode == Payment.ERROR_CODE_INTERNET_CONNECTION) {
                                 Intent intentDorsaPayment = payment.getPaymentIntent(
-                                        300,//mciDailyPrice
-
+                                        300,//mci daily price
+                                        200,//irancell daily price
+                                        //false,// if you want be full screen
                                         appCode,
                                         productCode,
                                         irancellSku,

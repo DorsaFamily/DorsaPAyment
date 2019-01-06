@@ -54,7 +54,8 @@ public class Payment {
     /**
      * متد دریافت intent فراخوانی پرداخت
      *
-     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
+     * @param mciDailyPrice        مبلغ شارژ روزانه همراه اول(اجباری)
+     * @param irancellPrice        مبلغ شارژ روزانه ایرانسل(اجباری)
      * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
      * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
      * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
@@ -62,6 +63,7 @@ public class Payment {
      */
     public Intent getPaymentIntent(
             int mciDailyPrice,
+            int irancellPrice,
             String appCode,
             String productCode,
             String irancellSku,
@@ -83,7 +85,7 @@ public class Payment {
 
         appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
 
-        String textSendPhoneNumber = appName + "\n با تعرفه روزانه " + mciDailyPrice + " تومان شماره تلفن همراه خود را وارد نمایید.";
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان و برای ایرانسل "+irancellPrice+ " تومان شماره تلفن همراه خود را وارد نمایید.";
 
         return getPaymentIntent(
                 mciDailyPrice,
@@ -99,7 +101,8 @@ public class Payment {
     /**
      * متد دریافت intent فراخوانی پرداخت
      *
-     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
+     * @param mciDailyPrice        مبلغ شارژ روزانه همراه اول(اجباری)
+     * @param irancellPrice        مبلغ شارژ روزانه ایرانسل(اجباری)
      * @param isFullScreen         آیا برنامه تمام صفحه ایجاد شود
      * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
      * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
@@ -108,6 +111,7 @@ public class Payment {
      */
     public Intent getPaymentIntent(
             int mciDailyPrice,
+            int irancellPrice,
             boolean isFullScreen,
             String appCode,
             String productCode,
@@ -142,7 +146,7 @@ public class Payment {
 
         appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
 
-        String textSendPhoneNumber = appName + "\n با تعرفه روزانه " + mciDailyPrice + " تومان شماره تلفن همراه خود را وارد نمایید.";
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان و برای ایرانسل "+irancellPrice+ " تومان شماره تلفن همراه خود را وارد نمایید.";
 
         return getPaymentIntent(
                 mciDailyPrice,
@@ -164,7 +168,7 @@ public class Payment {
      * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
      * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
-    public Intent getPaymentIntent(
+    private Intent getPaymentIntent(
             int mciDailyPrice,
             String textSendPhoneNumber,
             String appCode,
@@ -196,7 +200,7 @@ public class Payment {
      * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
      * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
      */
-    public Intent getPaymentIntent(
+    private Intent getPaymentIntent(
             int mciDailyPrice,
             boolean isFullScreen,
             String textSendPhoneNumber,

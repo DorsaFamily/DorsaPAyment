@@ -37,7 +37,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxWidth="350dp"
-            android:maxLines="3"
             android:text="برای پرداخت شماره همراه خود را وارد نمایید"
             android:textColor="#0e42a7"
             android:textSize="14sp" />

@@ -111,7 +111,7 @@ public class PaymentActivity extends AppCompatActivity implements
                                         paymentProductCode,
                                         paymentAppCode,
                                         paymentIrancellSku
-                                ), KEY_FRG_CHECK_STATUS).commit();
+                                ), KEY_FRG_CHECK_STATUS).commitAllowingStateLoss();
             }
 
 
@@ -155,7 +155,7 @@ public class PaymentActivity extends AppCompatActivity implements
     @Override
     public void startPaymentFlow(boolean showIntro) {
         if (showIntro && splashLayoutResource != null && splashLayoutResource.length > 0) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment, new FragmentIntro().newInstance(splashLayoutResource), KEY_FRG_INTRO).commitAllowingStateLoss();
         } else {
             new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment,
@@ -166,7 +166,7 @@ public class PaymentActivity extends AppCompatActivity implements
                             paymentAppCode,
                             paymentIrancellSku,
                             marketId
-                    ), KEY_FRG_PAYMENT).commit();
+                    ), KEY_FRG_PAYMENT).commitAllowingStateLoss();
         }
     }
 

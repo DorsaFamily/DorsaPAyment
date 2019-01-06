@@ -154,7 +154,7 @@ public class DialogSendKey extends Fragment {
     private void applyKey(String key) {
         if (textKeyKey != null) {
             textKeyKey.setText(key);
-            shakeView(btnKeySend);
+           // shakeView(btnKeySend);
         }
     }
 
