@@ -7,11 +7,11 @@
     android:background="@android:color/transparent"
     >
 
-    <ImageView
+    <ir.dorsa.totalpayment.customView.PaymentImageResizer
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/paymrnt_bgr"
         android:scaleType="fitXY"
+        app:source="@drawable/paymrnt_bgr"
         />
 
     <FrameLayout
