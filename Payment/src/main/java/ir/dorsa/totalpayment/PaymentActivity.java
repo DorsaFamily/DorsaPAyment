@@ -27,8 +27,9 @@ import ir.dorsa.totalpayment.toolbarHandler.ToolbarHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.Payment.KEY_APP_CODE;
-import static ir.dorsa.totalpayment.payment.Payment.KEY_DAILY_PRICE;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_IRANCELL_DAILY_PRICE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MARKET_ID;
+import static ir.dorsa.totalpayment.payment.Payment.KEY_MCI_DAILY_PRICE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_MESSAGE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_PRODUCT_CODE;
 import static ir.dorsa.totalpayment.payment.Payment.KEY_SKU;
@@ -51,7 +52,8 @@ public class PaymentActivity extends AppCompatActivity implements
     private String paymentIrancellSku;
     private int[] splashLayoutResource;
     private String marketId;
-    private String dailyPrice;
+    private String mciDailyPrice;
+    private String irancellDailyPrice;
 
 
     @Override
@@ -87,15 +89,34 @@ public class PaymentActivity extends AppCompatActivity implements
 
             marketId = getIntent().getExtras().getString(KEY_MARKET_ID);
 
-            dailyPrice = getIntent().getExtras().getString(KEY_DAILY_PRICE);
+            mciDailyPrice = getIntent().getExtras().getString(KEY_MCI_DAILY_PRICE);
+            irancellDailyPrice = getIntent().getExtras().getString(KEY_IRANCELL_DAILY_PRICE);
 
             if (
                     textSendPhoneNumber == null ||
                             paymentAppCode == null ||
                             paymentProductCode == null ||
-                            dailyPrice == null
+                            mciDailyPrice == null ||
+                            irancellDailyPrice == null
+
                     ) {
-                onExit("مقادیر ناقص می باشد");
+                String error="مقادیر ناقص می باشد";
+                if(textSendPhoneNumber == null){
+                    error+="\n"+"PhoneNumber";
+                }
+                if(paymentAppCode == null){
+                    error+="\n"+"AppCode";
+                }
+                if(paymentProductCode == null){
+                    error+="\n"+"ProductCode";
+                }
+                if(mciDailyPrice == null){
+                    error+="\n"+"mciDilyPrice";
+                }
+                if(irancellDailyPrice == null){
+                    error+="\n"+"irancellDailyPrice";
+                }
+                onExit(error);
                 return;
             }
 
@@ -160,7 +181,8 @@ public class PaymentActivity extends AppCompatActivity implements
             new ToolbarHandler().makeTansluteToolbar(this, getWindow(), getWindow().getDecorView());
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_fragment,
                     new FragmentPayment().newInstance(
-                            dailyPrice,
+                            mciDailyPrice,
+                            irancellDailyPrice,
                             textSendPhoneNumber,
                             paymentProductCode,
                             paymentAppCode,

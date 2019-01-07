@@ -28,7 +28,8 @@ public class Payment {
     public static final String KEY_SKU = "KEY_SKU";
     public static final String KEY_SPLASH = "KEY_SPLASH";
     public static final String KEY_MESSAGE = "message";
-    public static final String KEY_DAILY_PRICE = "KEY_DAILY_PRICE";
+    public static final String KEY_MCI_DAILY_PRICE = "KEY_MCI_DAILY_PRICE";
+    public static final String KEY_IRANCELL_DAILY_PRICE = "KEY_IRANCELL_DAILY_PRICE";
 
     public static final int ERROR_CODE_USER_NOT_REGISTERED = IMPayment.STATUS_USER_NOT_REGISTER_YET;
     public static final int ERROR_CODE_INTERNET_CONNECTION = IMPayment.STATUS_INTERNRT_CONNECTION;
@@ -89,6 +90,7 @@ public class Payment {
 
         return getPaymentIntent(
                 mciDailyPrice,
+                irancellPrice,
                 false,
                 textSendPhoneNumber,
                 appCode,
@@ -132,6 +134,20 @@ public class Payment {
                 .replace("7", "۷")
                 .replace("8", "۸")
                 .replace("9", "۹");
+
+        String irancellDailyPriceString = ""+irancellPrice;
+        irancellDailyPriceString=irancellDailyPriceString
+                .replace("0", "۰")
+                .replace("1", "۱")
+                .replace("2", "۲")
+                .replace("3", "۳")
+                .replace("4", "۴")
+                .replace("5", "۵")
+                .replace("6", "۶")
+                .replace("7", "۷")
+                .replace("8", "۸")
+                .replace("9", "۹");
+
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         String appName = applicationInfo.name;
         String pkgName = context.getPackageName();
@@ -146,41 +162,12 @@ public class Payment {
 
         appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
 
-        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان و برای ایرانسل "+irancellPrice+ " تومان شماره تلفن همراه خود را وارد نمایید.";
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPriceString +" تومان و برای ایرانسل "+irancellDailyPriceString+ " تومان شماره تلفن همراه خود را وارد نمایید.";
 
         return getPaymentIntent(
                 mciDailyPrice,
+                irancellPrice,
                 isFullScreen,
-                textSendPhoneNumber,
-                appCode,
-                productCode,
-                irancellSku,
-                splashLayoutResource);
-    }
-
-    /**
-     * متد دریافت intent فراخوانی پرداخت
-     *
-     * @param mciDailyPrice        مبلغ شارژ روزانه(اجباری)
-     * @param textSendPhoneNumber  متن دیالوگ دریافت شماره موبایل (اجباری)
-     * @param appCode              شماره کد دریافت شده از درسا برای برنامه (اجباری)
-     * @param productCode          شماره محصول دریافت شده از درسا برای برنامه (اجباری)
-     * @param irancellSku          شماره کد دریافت شده برای پرداخت شماره های ایرانسل (اختیاری)
-     * @param splashLayoutResource آرایه لیست لایه های طراحی شده برای نمایش به کاربر (اختیاری)
-     */
-    private Intent getPaymentIntent(
-            int mciDailyPrice,
-            String textSendPhoneNumber,
-            String appCode,
-            String productCode,
-            String irancellSku,
-            int[] splashLayoutResource
-
-    ) {
-
-        return getPaymentIntent(
-                mciDailyPrice,
-                false,
                 textSendPhoneNumber,
                 appCode,
                 productCode,
@@ -202,6 +189,7 @@ public class Payment {
      */
     private Intent getPaymentIntent(
             int mciDailyPrice,
+            int irancellDailyPrice,
             boolean isFullScreen,
             String textSendPhoneNumber,
             String appCode,
@@ -215,26 +203,14 @@ public class Payment {
         Intent intent;
         intent = new Intent(context, PaymentActivity.class);
 
-        String mciDailyPriceString = ""+mciDailyPrice;
-        mciDailyPriceString=mciDailyPriceString
-                .replace("0", "۰")
-                .replace("1", "۱")
-                .replace("2", "۲")
-                .replace("3", "۳")
-                .replace("4", "۴")
-                .replace("5", "۵")
-                .replace("6", "۶")
-                .replace("7", "۷")
-                .replace("8", "۸")
-                .replace("9", "۹");
-
         intent.putExtra(KEY_IS_FULLSCREEN, isFullScreen);
         intent.putExtra(KEY_TEXT_SEND_PHONE_NUMBER, textSendPhoneNumber);
         intent.putExtra(KEY_APP_CODE, appCode);
         intent.putExtra(KEY_PRODUCT_CODE, productCode);
         intent.putExtra(KEY_SKU, irancellSku);
         intent.putExtra(KEY_SPLASH, splashLayoutResource);
-        intent.putExtra(KEY_DAILY_PRICE, mciDailyPriceString);
+        intent.putExtra(KEY_MCI_DAILY_PRICE, ""+mciDailyPrice);
+        intent.putExtra(KEY_IRANCELL_DAILY_PRICE, ""+irancellDailyPrice);
 
         if (getMarketId() != null) {
             intent.putExtra(KEY_MARKET_ID, getMarketId());

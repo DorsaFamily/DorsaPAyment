@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ir.dorsa.totalpayment.R;
+import ir.dorsa.totalpayment.tools.Func;
 
 import static ir.dorsa.totalpayment.service.SmsListener.BROADCAST_UPDATE;
 
@@ -37,7 +38,8 @@ public class DialogSendKey extends Fragment {
     private String phoneNumber;
     private String message;
     private String error;
-    private String dailyPrice ="۳۰۰";
+    private String mciDailyPrice = "۳۰۰";
+    private String irancellDailyPrice = "۳۰۰";
 
 
     private View pView;
@@ -120,19 +122,9 @@ public class DialogSendKey extends Fragment {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setDailyPrice(String dailyPrice) {
-        dailyPrice = dailyPrice
-                .replace("0","۰")
-                .replace("1","۱")
-                .replace("2","۲")
-                .replace("3","۳")
-                .replace("4","۴")
-                .replace("5","۵")
-                .replace("6","۶")
-                .replace("7","۷")
-                .replace("8","۸")
-                .replace("9","۹");
-        this.dailyPrice = dailyPrice;
+    public void setDailyPrice(String mciDailyPrice, String irancellDailyPrice) {
+        this.mciDailyPrice = mciDailyPrice;
+        this.irancellDailyPrice = irancellDailyPrice;
     }
 
     public void applyError() {
@@ -154,7 +146,7 @@ public class DialogSendKey extends Fragment {
     private void applyKey(String key) {
         if (textKeyKey != null) {
             textKeyKey.setText(key);
-           // shakeView(btnKeySend);
+            // shakeView(btnKeySend);
         }
     }
 
@@ -165,9 +157,38 @@ public class DialogSendKey extends Fragment {
 
     }
 
-    public void applyDailyPrice(){
+    public void applyDailyPrice() {
         if (textDailyPrice != null) {
-            textDailyPrice.setText("هزینه روزانه "+ dailyPrice +" تومان");
+            if (Func.isNumberMci(phoneNumber)) {
+                textDailyPrice.setText("هزینه روزانه " +
+                        mciDailyPrice
+                                .replace("0", "۰")
+                                .replace("1", "۱")
+                                .replace("2", "۲")
+                                .replace("3", "۳")
+                                .replace("4", "۴")
+                                .replace("5", "۵")
+                                .replace("6", "۶")
+                                .replace("7", "۷")
+                                .replace("8", "۸")
+                                .replace("9", "۹")
+                        + " تومان");
+            } else {
+                textDailyPrice.setText("هزینه روزانه " +
+                        irancellDailyPrice
+                                .replace("0", "۰")
+                                .replace("1", "۱")
+                                .replace("2", "۲")
+                                .replace("3", "۳")
+                                .replace("4", "۴")
+                                .replace("5", "۵")
+                                .replace("6", "۶")
+                                .replace("7", "۷")
+                                .replace("8", "۸")
+                                .replace("9", "۹")
+                        + " تومان");
+            }
+
         }
     }
 
@@ -200,8 +221,8 @@ public class DialogSendKey extends Fragment {
         }
     };
 
-    private void shakeView(View target){
-        android.animation.AnimatorSet animationSet=new android.animation.AnimatorSet();
+    private void shakeView(View target) {
+        android.animation.AnimatorSet animationSet = new android.animation.AnimatorSet();
         animationSet.playTogether(
                 ObjectAnimator.ofFloat(target, "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
 
