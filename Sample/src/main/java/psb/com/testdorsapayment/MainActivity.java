@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        payment.setMarketId(MarketingId);//در صورتی که خروجی برای مارکتینگ می باشد از این دستور استفاده گردد
 
-//        payment.setEnableIrancell(false);// برای عدم قابلیت اشتراک سیم کارت های همراه اول
+//        payment.setEnableIrancell(false);// فعال یا غیر فعال کردن پرداخت برای سیم کارت ایرانسل
 //        payment.isUserPremium();// بررسی اینکه کاربر قبلا ثبت نام نموده است یا نه
 
 //        String userPhoneNumber=payment.getPhoneNumber(); //دریافت شماره موبایل کاربر
