@@ -17,10 +17,11 @@ import android.widget.RelativeLayout;
 
 import ir.dorsa.totalpayment.R;
 import ir.dorsa.totalpayment.customView.ViewPagerIndicator;
+import ir.dorsa.totalpayment.payment.Payment;
 
 public class FragmentIntro extends Fragment {
 
-    private static String KEY_RESOURCE_LAYOUT="";
+    private static String KEY_RESOURCE_LAYOUT = "";
     private View pView;
     private ViewPager viewPager;
     private RelativeLayout relEnter;
@@ -28,13 +29,16 @@ public class FragmentIntro extends Fragment {
 
     private View back;
 
-    private int layoutId[]=new int[4];
+    private View prev;
+    private View next;
+
+    private int layoutId[] = new int[4];
     private interaction mListener;
 
-    public static FragmentIntro newInstance(int[] splashResource){
-        FragmentIntro fragmentIntro=new FragmentIntro();
-        Bundle args=new Bundle();
-        args.putIntArray(KEY_RESOURCE_LAYOUT,splashResource);
+    public static FragmentIntro newInstance(int[] splashResource) {
+        FragmentIntro fragmentIntro = new FragmentIntro();
+        Bundle args = new Bundle();
+        args.putIntArray(KEY_RESOURCE_LAYOUT, splashResource);
         fragmentIntro.setArguments(args);
         return fragmentIntro;
     }
@@ -42,20 +46,24 @@ public class FragmentIntro extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
-            layoutId=getArguments().getIntArray(KEY_RESOURCE_LAYOUT);
+        if (getArguments() != null) {
+            layoutId = getArguments().getIntArray(KEY_RESOURCE_LAYOUT);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        pView=inflater.inflate(R.layout.payment_fragment_intro,container,false);
+        pView = inflater.inflate(R.layout.payment_fragment_intro, container, false);
 
-        viewPager =pView.findViewById(R.id.view_pager);
-        relEnter=pView.findViewById(R.id.enter);
-        viewPagerIndicator=pView.findViewById(R.id.view_pager_indicator);
-        back=pView.findViewById(R.id.back);
+        viewPager = pView.findViewById(R.id.view_pager);
+        relEnter = pView.findViewById(R.id.enter);
+        viewPagerIndicator = pView.findViewById(R.id.view_pager_indicator);
+        back = pView.findViewById(R.id.back);
+
+        prev = pView.findViewById(R.id.prev);
+        next = pView.findViewById(R.id.next);
+
 
         if (back != null) {
             back.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +75,32 @@ public class FragmentIntro extends Fragment {
                 }
             });
         }
+
+        if (prev != null) {
+            prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (viewPager.getCurrentItem() > 0) {
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+                    }
+                }
+            });
+        }
+
+        if (next != null) {
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (viewPager.getCurrentItem() < (layoutId.length - 1)) {
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    }
+                }
+            });
+        }
+
+
+        setPrevVisibility(false);
+        setNextVisibility(layoutId.length > 1);
 
 
         setupViewPager();
@@ -80,7 +114,17 @@ public class FragmentIntro extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                if(position==layoutId.length-1){
+                setNextVisibility(true);
+                setPrevVisibility(true);
+
+                if (position == 0) {
+                    setPrevVisibility(false);
+                }
+
+                if (position == layoutId.length - 1) {
+
+                    setNextVisibility(false);
+
                     relEnter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -90,7 +134,7 @@ public class FragmentIntro extends Fragment {
                         }
                     });
                     showEnter();
-                }else if(relEnter.getVisibility()==View.VISIBLE){
+                } else if (relEnter.getVisibility() == View.VISIBLE) {
                     relEnter.setOnClickListener(null);
                     hideenter();
                 }
@@ -102,7 +146,7 @@ public class FragmentIntro extends Fragment {
             }
         });
 
-        if(layoutId.length<=1){
+        if (layoutId.length <= 1) {
             relEnter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -120,20 +164,20 @@ public class FragmentIntro extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof interaction){
-            mListener=(interaction)context;
+        if (context instanceof interaction) {
+            mListener = (interaction) context;
         }
     }
 
-    private void setupViewPager(){
+    private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        for(int layoutId:layoutId){
+        for (int layoutId : layoutId) {
             adapter.addFragment(new FragmentPage().newInstance(layoutId));
         }
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
 
-        if(layoutId.length==1){
+        if (layoutId.length == 1) {
             relEnter.setVisibility(View.VISIBLE);
             relEnter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -147,9 +191,9 @@ public class FragmentIntro extends Fragment {
     }
 
 
-    private void showEnter(){
-        relEnter.setPivotX(relEnter.getMeasuredWidth()/2);
-        relEnter.setPivotY(relEnter.getMeasuredHeight()/2);
+    private void showEnter() {
+        relEnter.setPivotX(relEnter.getMeasuredWidth() / 2);
+        relEnter.setPivotY(relEnter.getMeasuredHeight() / 2);
 
         relEnter.setScaleX(0.0f);
         relEnter.setScaleY(0.0f);
@@ -171,9 +215,9 @@ public class FragmentIntro extends Fragment {
         scaleDown.start();
     }
 
-    private void hideenter(){
-        relEnter.setPivotX(relEnter.getMeasuredWidth()/2);
-        relEnter.setPivotY(relEnter.getMeasuredHeight()/2);
+    private void hideenter() {
+        relEnter.setPivotX(relEnter.getMeasuredWidth() / 2);
+        relEnter.setPivotY(relEnter.getMeasuredHeight() / 2);
 
         relEnter.setScaleX(0.0f);
         relEnter.setScaleY(0.0f);
@@ -195,9 +239,43 @@ public class FragmentIntro extends Fragment {
         });
     }
 
+    private void setNextVisibility(boolean visibility) {
+        if (next == null) {
+            return;
+        }
 
-    public interface interaction{
+        if (Payment.marketId != null && !Payment.marketId.isEmpty()) {
+            if (visibility) {
+                next.setVisibility(View.VISIBLE);
+            } else {
+                next.setVisibility(View.GONE);
+            }
+        } else {
+            next.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    private void setPrevVisibility(boolean visibility) {
+        if (prev == null) {
+            return;
+        }
+        if (Payment.marketId != null && !Payment.marketId.isEmpty()) {
+            if (visibility) {
+                prev.setVisibility(View.VISIBLE);
+            } else {
+                prev.setVisibility(View.GONE);
+            }
+        } else {
+            prev.setVisibility(View.GONE);
+        }
+    }
+
+
+    public interface interaction {
         void onEnterSelected();
+
         void onBackPressed();
     }
 }

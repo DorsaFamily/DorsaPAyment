@@ -39,7 +39,7 @@ public class Payment {
 
     private Context context;
 
-    private String marketId;
+    public static String marketId;
 
 
     public Payment(Context context) {
