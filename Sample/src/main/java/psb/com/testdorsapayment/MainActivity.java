@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         final Payment payment = new Payment(this);
 
 
-//        payment.setMarketId(MarketingId);//در صورتی که خروجی برای مارکتینگ می باشد از این دستور استفاده گردد
+        payment.setMarketId(MarketingId);//در صورتی که خروجی برای مارکتینگ می باشد از این دستور استفاده گردد
 
 //        payment.setEnableIrancell(false);// فعال یا غیر فعال کردن پرداخت برای سیم کارت ایرانسل
 //        payment.isUserPremium();// بررسی اینکه کاربر قبلا ثبت نام نموده است یا نه

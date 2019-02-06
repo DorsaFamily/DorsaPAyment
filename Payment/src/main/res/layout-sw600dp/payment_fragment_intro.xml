@@ -15,7 +15,7 @@
     <RelativeLayout
         android:id="@+id/rel_indicator"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="53dp"
         android:layout_alignParentBottom="true"
         android:background="#72000000">
 
@@ -27,10 +27,10 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_marginLeft="@dimen/space_normal"
+            android:layout_marginLeft="15dp"
             android:text="قبلی"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="30sp" />
 
         <ir.dorsa.totalpayment.customView.CTextViewBold
             android:id="@+id/prev_holder"
@@ -54,9 +54,9 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="بعدی"
-            android:layout_marginRight="@dimen/space_normal"
+            android:layout_marginRight="15dp"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="30sp" />
 
         <ir.dorsa.totalpayment.customView.CTextViewBold
             android:id="@+id/next_holder"
