@@ -86,7 +86,13 @@ public class Payment {
 
         appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
 
-        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان و برای ایرانسل "+irancellPrice+ " تومان شماره تلفن همراه خود را وارد نمایید.";
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان";
+
+        if(isIrancelEnable()) {
+            textSendPhoneNumber=textSendPhoneNumber+" و برای ایرانسل " + irancellPrice + " تومان";
+        }
+
+        textSendPhoneNumber=textSendPhoneNumber+" شماره تلفن همراه خود را وارد نمایید.";
 
         textSendPhoneNumber=textSendPhoneNumber
                 .replace("0", "۰")
@@ -174,7 +180,14 @@ public class Payment {
 
         appName = (!appName.isEmpty() ? "جهت فعالسازی برنامک " + appName : "جهت فعالسازی این برنامه");
 
-        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPriceString +" تومان و برای ایرانسل "+irancellDailyPriceString+ " تومان شماره تلفن همراه خود را وارد نمایید.";
+        String textSendPhoneNumber = appName + "\n با تعرفه روزانه برای همراه اول  " + mciDailyPrice +" تومان";
+
+        if(isIrancelEnable()) {
+            textSendPhoneNumber=textSendPhoneNumber+" و برای ایرانسل " + irancellPrice + " تومان";
+        }
+
+        textSendPhoneNumber=textSendPhoneNumber+" شماره تلفن همراه خود را وارد نمایید.";
+
 
         return getPaymentIntent(
                 mciDailyPrice,
@@ -259,6 +272,11 @@ public class Payment {
         SharedPreferences.Editor sharedPrefereceEditor = sharedPrefrece.edit();
         sharedPrefereceEditor.putBoolean(SH_P_BUY_IN_APP_ENABLE_IRANCELL, isEnable);
         sharedPrefereceEditor.commit();
+    }
+
+    public boolean isIrancelEnable(){
+        SharedPreferences sharedPrefrece = context.getSharedPreferences(SH_P_BUY_IN_APP, context.MODE_PRIVATE);
+        return sharedPrefrece.getBoolean(SH_P_BUY_IN_APP_ENABLE_IRANCELL, true);
     }
 
     /**
