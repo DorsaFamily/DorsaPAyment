@@ -8,12 +8,14 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.Fragment;
 
 import net.jhoobin.amaroidsdk.Amaroid;
+import net.jhoobin.amaroidsdk.TrackHelper;
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
 import ir.dorsa.totalpayment.irancell.IrancellCancel;
 import ir.dorsa.totalpayment.registerInformation.RegisterInfo;
 import ir.dorsa.totalpayment.tools.Func;
+import ir.dorsa.totalpayment.tools.UncaughtExHandler;
 import ir.dorsa.totalpayment.tools.Utils;
 
 import static ir.dorsa.totalpayment.payment.IMPayment.SH_P_BUY_IN_APP;
@@ -51,12 +53,10 @@ public class Payment {
         } catch (Exception ex) {
         }
 
-        try{
-            Amaroid.getInstance().submitEventPageView(context,"Dashboard");
-        }catch (Exception ex){
 
-        }
     }
+
+
 
     private onCheckFinished onCheckFinished;
 
@@ -266,12 +266,26 @@ public class Payment {
             String productCode,
             String sku,
             onCheckFinished onCheckFinished) {
-
+        initAmaroid();
         setOnCheckFinished(onCheckFinished);
         PPayment pPayment = new PPayment(ivPayment, appCode, productCode, sku);
         pPayment.setContext(context);
         pPayment.checkStatus();
         new RegisterInfo(context).install();
+    }
+
+
+     protected void initAmaroid(){
+        try{
+            Amaroid.getInstance().submitEventPageView(context,"Dashboard");
+            Amaroid.getInstance().setTags("zemestane","cmpId12",null);
+            Amaroid.getInstance().submitEventPageView(context,"Dashboard");
+            Amaroid.getInstance().submitEvent(context, (long)123, "push", null, "view");
+            Thread.setDefaultUncaughtExceptionHandler(UncaughtExHandler.getInstance(context));
+            TrackHelper.trackViewSubject(context, this);
+        }catch (Exception ex){
+
+        }
     }
 
 
