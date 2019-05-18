@@ -24,6 +24,7 @@ Follow below steps to add **DorsaPayment** to your app :
      allprojects {
                     repositories {
                         maven { url "https://jitpack.io" }
+			maven {url 'http://jhoobin.abroid.com/repo/'}
                     }
                 }
      ```
