@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.Fragment;
 
+import net.jhoobin.amaroidsdk.Amaroid;
 import net.jhoobin.jhub.CharkhoneSdkApp;
 
 import ir.dorsa.totalpayment.PaymentActivity;
@@ -36,6 +37,7 @@ public class Payment {
     public static final int ERROR_CODE_USER_HAS_NO_CHARGE = IMPayment.STATUS_NO_CHARGE;
 
     public static boolean isFullScreen = false;
+    public static boolean useLoyalty=false;
 
     private Context context;
 
@@ -47,6 +49,12 @@ public class Payment {
         try {
             CharkhoneSdkApp.initSdk(context, Utils.getSecrets(context));
         } catch (Exception ex) {
+        }
+
+        try{
+            Amaroid.getInstance().submitEventPageView(context,"Dashboard");
+        }catch (Exception ex){
+
         }
     }
 
@@ -330,6 +338,14 @@ public class Payment {
 
     public void setMarketId(String marketId) {
         this.marketId = marketId;
+    }
+
+    public static boolean isUseLoyalty() {
+        return useLoyalty;
+    }
+
+    public static void setUseLoyalty(boolean useLoyality) {
+        Payment.useLoyalty = useLoyality;
     }
 
     @Deprecated
